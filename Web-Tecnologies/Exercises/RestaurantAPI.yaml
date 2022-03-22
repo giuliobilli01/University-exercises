@@ -1,0 +1,140 @@
+swagger: "2.0"
+info:
+  description: "API Ristorante"
+  version: "0.0.1"
+  title: "API Ristorante"
+  
+host: "tw.cs.unibo.it"
+basePath: "/v1"
+# Dobbiamo fare una sezione path con le varie operazioni
+paths:
+  # URL del menu
+  /menu/:
+  #operazione di GET
+   get:
+    # Descrizione get -->nella mia API è possibile fare l'operazione di get senza nessun parametro
+    responses:
+    # Due possibili risposte
+      200:
+        description: "OK"
+        schema:
+          type: array
+          items: 
+            # in questa richiesta non prende in input niente perchè non ci sono parametri e restituisce un array di Menu
+            $ref: "#/definitions/Menu"
+      400:
+        description: "Generic error"
+    
+   # URL del menu specifico
+  /menu/{idMenu}:
+  #operazione di GET
+  # devo definire l'idMenu
+  # Con questa get ottegno le informazioni di un Menu
+   get:
+    parameters:
+      - name: idMenu
+        in: path
+        type: integer
+        format: int64
+        required: true
+    # Descrizione get 
+    responses:
+    # Due possibili risposte
+      200:
+        description: "OK"
+        schema:
+            $ref: "#/definitions/Menu"
+      400:
+        description: "Generic error"
+  
+  # Ottengo i piatti in un menu
+  /menu/{idMenu}/piatti/:
+   get:
+    parameters:
+      - name: idMenu
+        in: path
+        type: integer
+        format: int64
+        required: true
+    # Descrizione get 
+    responses:
+    # Due possibili risposte
+      200:
+        description: "OK"
+        schema:
+          type: array
+          items:
+              $ref: "#/definitions/Piatto"
+      400:
+        description: "Generic error"
+   
+   # Cancello la collezzione di piatti dal Menu
+   delete:
+    parameters:
+      - name: idMenu
+        in: path
+        type: integer
+        format: int64
+        required: true
+    # Descrizione get 
+    responses:
+    # Due possibili risposte
+      200:
+        description: "OK"
+      400:
+        description: "Generic error"
+        
+   # Aggiungo un piatto a un menu
+   post:
+    parameters:
+      - name: idMenu
+        in: path
+        type: integer
+        format: int64
+        required: true
+      - name: nuovo piatto
+        in: body
+        schema:
+          #l'oggetto che passo è un piatto
+          $ref: "#/definitions/Piatto"
+        required: true
+    # Descrizione get 
+    responses:
+    # Due possibili risposte
+      200:
+        description: "OK"
+        # In risposta al post mi faccio dare la lista dei piatti
+        schema:
+          type: array
+          items:
+              $ref: "#/definitions/Piatto"
+      400:
+        description: "Generic error"
+schemes:
+- "http"
+
+#sezione definitios dove definisco gli oggetti che utilizzo nella API
+definitions:
+  Menu:
+    type: object
+    # contiene l'elenco delle proprietà obbligatorie
+    required:
+      - id
+      - title
+    properties:
+      id:
+        type: integer
+        format: int64
+      title: 
+        type: string
+  
+  Piatto:
+    type: object
+    properties:
+      id:
+        type: integer
+        format: int64
+      title: 
+        type: string
+  
+        
