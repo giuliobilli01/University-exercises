@@ -1,0 +1,23 @@
+body {
+  font-family: Verdana; 
+  padding: 10px;
+}
+
+#sec1 {
+  background-color: lightgray;
+  text-align: justify;
+}
+
+a{
+  background-color: red;
+  font-size: 150%;
+}
+
+o1{
+  font-style: italic;
+  border: 3px dashed blue;
+}
+
+h1{
+  text-align: center;
+}
