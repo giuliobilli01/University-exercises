@@ -77,3 +77,8 @@ monitor rw
     }
   }
 }
+
+// In es c.1 2012 24 maggio la condizione di deadlock si verifica se il santuario è pieno e il ponte è pieno di gente che va verso il santuario
+// quindi bisogna aggiungere una condizione
+
+// Il wprking set serve per stimare la quantità di pagine dche un processo richiede in modo da evitare situazioni di trashing in cui i processi si rubano le pagine a vicenda
