@@ -11,7 +11,7 @@ import sys
 
 def main():
     # Definiamo un dictionary vuoto in cui verrà salvato il sottoalbero
-    subTree = {}
+    subTree = []
     # Eseguiamo un for per percorrere l'intero sottoalbero in input
     for dirPath, dirNames, files in os.walk(sys.argv[1]):
       # Inseriamo ogni file presente nella directory corrente nel dizionario
@@ -19,9 +19,10 @@ def main():
         for file in files:
             fileName, fileExt = os.path.splitext(file)
             if (fileExt == '.c' or fileExt == '.h'):
-                print('ciao')
-                os.system(f"ex -n '+norm!gg=G' +wq {fileName}{fileExt}")
+                subTree.append(os.path.join(dirPath, file))
 
-
+    for path in subTree:
+      os.system(f"ex -n '+norm!gg=G' +wq {path}")
+      
 if __name__ == "__main__":
     main()
