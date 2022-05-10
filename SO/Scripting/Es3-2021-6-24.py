@@ -12,8 +12,13 @@ import sys
 def main():
     # Definiamo un dictionary vuoto in cui verrà salvato il sottoalbero
     subTree = []
+    # Controllo presenza directory come parametro
+    if len(sys.argv) > 1:
+		arg = sys.argv[1]
+	else:
+		arg = os.curdir
     # Eseguiamo un for per percorrere l'intero sottoalbero in input
-    for dirPath, dirNames, files in os.walk(sys.argv[1]):
+    for dirPath, dirNames, files in os.walk(arg):
       # Inseriamo ogni file presente nella directory corrente nel dizionario
       # e associamo a ogni file la directory a cui appartiene
         for file in files:
