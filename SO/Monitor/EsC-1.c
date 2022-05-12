@@ -25,57 +25,57 @@
 monitor rw
 {
 
-  // Contatori per i processi in waiting
-  int waitingToRead;
-  int waitingToWrite;
+	// Contatori per i processi in waiting
+	int waitingToRead;
+	int waitingToWrite;
 
-  // Dato tenuto dal monitor
-  T datoMonitor;
+	// Dato tenuto dal monitor
+	T datoMonitor;
 
-  // Varaibili di condizione per read e write
-  condition cWrite, cRead;
+	// Varaibili di condizione per read e write
+	condition cWrite, cRead;
 
-  // Funzione di inizializzazione
-  rw()
-  {
-    waitingToRead = 0;
-    waitingToWrite = 0;
-  }
-  // Procedure entry (pubbliche)
-  entry T get()
-  {
-    if (waitingToWrite > 0)
-    {
-      cWrite.signal();
-      return datoMonitor;
-    }
-    else
-    {
-      waitingToWrite++;
-      cwrite.wait();
-      // Se dopo la wait riprende subito
-      // waitingToWrite--;
-    }
-  }
+	// Funzione di inizializzazione
+	rw()
+	{
+		waitingToRead = 0;
+		waitingToWrite = 0;
+	}
+	// Procedure entry (pubbliche)
+	entry T get()
+	{
+		if (waitingToWrite > 0)
+		{
+			cWrite.signal();
+			return datoMonitor;
+		}
+		else
+		{
+			waitingToWrite++;
+			cwrite.wait();
+			// Se dopo la wait riprende subito
+			// waitingToWrite--;
+		}
+	}
 
-  entry put(T dato)
-  {
-    if (waitingToRead > 0)
-    {
-      datoMonitor = dato;
-      while (waitingToRead > 0)
-        cRead.signal();
-      waitingToRead--;
-    }
-    else if (waitingWrite > 0)
-    {
-      waitingToWrite++;
-      cWrite.wait();
-      // Nel caso in cui dopo la wait riprenda da qui
-      // datoMonitor = dato;
-      // waitingToWrite--;
-    }
-  }
+	entry put(T dato)
+	{
+		if (waitingToRead > 0)
+		{
+			datoMonitor = dato;
+			while (waitingToRead > 0)
+				cRead.signal();
+			waitingToRead--;
+		}
+		else if (waitingWrite > 0)
+		{
+			waitingToWrite++;
+			cWrite.wait();
+			// Nel caso in cui dopo la wait riprenda da qui
+			// datoMonitor = dato;
+			// waitingToWrite--;
+		}
+	}
 }
 
 // In es c.1 2012 24 maggio la condizione di deadlock si verifica se il santuario è pieno e il ponte è pieno di gente che va verso il santuario
