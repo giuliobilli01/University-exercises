@@ -1,0 +1,6 @@
+{
+  "files.associations": {
+    "inotify.h": "c",
+    "limits.h": "c"
+  }
+}
