@@ -42,7 +42,6 @@ int countSpaces(char* arrStart) {
 }
 
 int main(int argc, char *argv[]) {
-  
   char dir[PATH_MAX];
   getcwd(dir, sizeof(dir));
 
@@ -80,10 +79,14 @@ int main(int argc, char *argv[]) {
   while (i < numberOfEvents) {
     struct inotify_event* event = (struct inotify_event*) &buffer[i];
     if (event->mask & IN_CREATE) {
-      if (!(event->mask & IN_ISDIR)) {
+      if (event->mask & IN_ISDIR) {
+        printf("A directory has been created");
+      }
+      else {
+
         // Salviamo il nome del file
         char fileName[event->len];
-        char filePath[PATH_MAX];
+        char filePath[100];
         strcpy(fileName, event->name);
 
         // Salviamo il path del file create
@@ -92,8 +95,8 @@ int main(int argc, char *argv[]) {
         strcat(filePath, fileName);
 
         char* p= &fileName[0];
-        int spaces = countSpaces(p);
-
+        //int spaces = countSpaces(p);
+        int spaces = 3;
         char* argumentList[spaces + 1];
 
         char* token = strtok(fileName, " ");
@@ -104,11 +107,12 @@ int main(int argc, char *argv[]) {
           token = strtok(NULL, " ");
           k++;
         }
-        
-        //printf("%s, %s, %s ", argumentList[0], argumentList[1], argumentList[2]);
-        pid_t child = fork();
-        if (child == 0) {
-          execvp(command, argumentList);
+        argumentList[k] = NULL;
+        char* prova[] = {"ls", "-l", NULL};
+        pid_t child;
+        if ((child = fork()) == 0) {
+          int status= execvp(command, argumentList);
+          if (status == -1) printf("errore");
         }
 
         wait(&child);
