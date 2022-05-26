@@ -94,8 +94,7 @@ int main(int argc, char *argv[]) {
         strcat(filePath, fileName);
 
         char* p= &fileName[0];
-        //int spaces = countSpaces(p);
-        int spaces = 3;
+        int spaces = countSpaces(p);
         char* argumentList[spaces + 1];
 
         char* token = strtok(fileName, " ");
