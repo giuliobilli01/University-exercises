@@ -52,7 +52,7 @@ int main(int argc, char*argv[]) {
   if (fd < 0) perror("inotify_init");
 
   // Aggiungiamo alla watch list la directory exec da controllare
-  wd = inotify_add_watch(fd, dir, IN_CREATE);
+  wd = inotify_add_watch(fd, dir, IN_CREATE | IN_MOVE);
 
   // Chiamiamo read che rimane bloccato finchè non si verificano degli eventi 
   numberOfEvents = read(fd, buffer, EVENT_BUF_LEN);
