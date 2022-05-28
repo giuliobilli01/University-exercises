@@ -83,7 +83,6 @@ int main(int argc, char* argv[]) {
         strcpy(fileName, event->name);
 
 
-
         // Salviamo il path del file creato
         strcpy(filePath, dir);
         strcat(filePath, "/");
