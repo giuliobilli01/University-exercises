@@ -5,7 +5,7 @@
 Estendere il programma precedente in modo che accetti le seguenti opzioni:
 -c copia il file originale al posto di tutti i link
 -l trasforma tutti i link in link fisici
--s trasforma tutti i link in link simbolic
+-s trasforma tutti i link in link simbolici
  * @version 0.1
  * @date 2022-05-29
  * 
@@ -117,12 +117,11 @@ void recursivelyDirecotryExploration(char* targetFile, char* directory, int opti
             printf("link %s\n", entryPath);
 
            if (option == 3) {
-            char linkPath[strlen(entryPath)];
             char linkName[PATH_MAX];
             strcpy(linkName, entryPath);
-            realpath(entryPath, linkPath);
+            printf("%s\n", entryPath);
             unlink(entryPath);
-            int res = symlink(linkPath, linkName);
+            int res = symlink(targetFile, linkName);
             if (res != 0) {
               printf("Error during link creation");
             }
