@@ -89,19 +89,18 @@ void recursivelyDirecotryExploration(char* targetFile, char* directory, int opti
               fclose(destFile);
               fclose(srcFile);
             }
-            printf("%s", entryPath);
             if (option == 2) {
               char linkPath[strlen(entryPath)];
               char linkName[PATH_MAX];
               strcpy(linkName, entryPath);
-              realpath(entryPath, linkPath);
-              //unlink(entryPath);
+              realpath(targetFile, linkPath);
+              unlink(entryPath);
               printf("%s\n", linkPath);
               printf("%s\n", linkName);
-              //int res = link(linkPath, linkName);
-              //if (res != 0) {
-              //  printf("Error durint link creation");
-              //}
+              int res = link(linkPath, linkName);
+              if (res != 0) {
+                printf("Error durint link creation");
+              }
             }
           }
       // Nel caso in cui il file non sia un symbolic link
