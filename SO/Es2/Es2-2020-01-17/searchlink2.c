@@ -115,6 +115,26 @@ void recursivelyDirecotryExploration(char* targetFile, char* directory, int opti
           if (option == 0)
             printf("link %s\n", entryPath);
 
+          if (option == 1) {
+              // Elimino il link file
+              unlink(entryPath);
+              // Estraggo il nome del file dal path in input
+              char newFilePath[PATH_MAX];
+              char filePathCpy[PATH_MAX];
+              strcpy(filePathCpy, targetFile);
+              strcpy(newFilePath, directory);
+              strcat(newFilePath, "/");
+              strcat(newFilePath, basename(filePathCpy));
+              FILE* srcFile = fopen(targetFile, "r");
+              FILE* destFile = fopen(newFilePath, "w");
+              char c;
+              while ((c = fgetc(srcFile)) != EOF) {
+                fputc(c, destFile);
+              }
+              fclose(destFile);
+              fclose(srcFile);
+            }
+
            if (option == 3) {
             char linkName[PATH_MAX];
             strcpy(linkName, entryPath);
