@@ -61,68 +61,71 @@ void recursivelyDirecotryExploration(char* targetFile, char* directory, int opti
 
       // Nel caso in cui il file sia un symbolic link
       if (S_ISLNK(file.st_mode)) {
-        if (option == 0) {
           char linkDestination[PATH_MAX];
           // Troviamo il path del link file
           realpath(entryPath, linkDestination);
           realpath(targetFile, inputFilePath);
           // E lo compariamo con quello del file obbiettivo
           if (strcmp(linkDestination, inputFilePath) == 0) {
+            if (option == 0) {
             printf("symlink %s\n",entryPath);
+            }
+            if (option == 1) {
+              // Elimino il link file
+              unlink(entryPath);
+              // Estraggo il nome del file dal path in input
+              char newFilePath[PATH_MAX];
+              char filePathCpy[PATH_MAX];
+              strcpy(filePathCpy, targetFile);
+              strcpy(newFilePath, directory);
+              strcat(newFilePath, "/");
+              strcat(newFilePath, basename(filePathCpy));
+              FILE* srcFile = fopen(targetFile, "r");
+              FILE* destFile = fopen(newFilePath, "a");
+              char c;
+              while ((c = fgetc(srcFile)) != EOF) {
+                fputc(c, destFile);
+              }
+              fclose(destFile);
+              fclose(srcFile);
+            }
+            printf("%s", entryPath);
+            if (option == 2) {
+              char linkPath[strlen(entryPath)];
+              char linkName[PATH_MAX];
+              strcpy(linkName, entryPath);
+              realpath(entryPath, linkPath);
+              //unlink(entryPath);
+              printf("%s\n", linkPath);
+              printf("%s\n", linkName);
+              //int res = link(linkPath, linkName);
+              //if (res != 0) {
+              //  printf("Error durint link creation");
+              //}
+            }
           }
-        }
-        if (option == 1) {
-          // Elimino il link file
-          unlink(entryPath);
-          // Estraggo il nome del file dal path in input
-          char newFilePath[PATH_MAX];
-          char filePathCpy[PATH_MAX];
-          strcpy(filePathCpy, targetFile);
-          strcpy(newFilePath, directory);
-          strcat(newFilePath, "/");
-          strcat(newFilePath, basename(filePathCpy));
-          FILE* srcFile = fopen(targetFile, "r");
-          FILE* destFile = fopen(newFilePath, "a");
-          char c;
-          while ((c = fgetc(srcFile)) != EOF) {
-            fputc(c, destFile);
-        }
-          fclose(destFile);
-          fclose(srcFile);
-        }
-        if (option == 2) {
-          char linkPath[strlen(entryPath)];
-          char linkName[PATH_MAX];
-          strcpy(linkName, entryPath);
-          realpath(entryPath, linkPath);
-          unlink(entryPath);
-          int res = link(linkPath, linkName);
-          if (res != 0) {
-            printf("Error durint link creation");
-          }
-        }
       // Nel caso in cui il file non sia un symbolic link
-      } else if(S_ISREG(file.st_mode)) {
-        if (option == 0) {
-          // Confrontiamo gli inode del file obbiettivo 
-          // e del file nella directory per vedere se 
-          // sono fanno riferimento allo stesso file
-          realpath(targetFile, inputFilePath);
-          struct stat targetFileDescription;
-          lstat(inputFilePath, &targetFileDescription);
-          if ((file.st_ino == targetFileDescription.st_ino) && (strcmp(entryPath, targetFile) != 0)) {
+    } else if(S_ISREG(file.st_mode)) {
+        // Confrontiamo gli inode del file obbiettivo 
+        // e del file nella directory per vedere se 
+        // sono fanno riferimento allo stesso file
+        realpath(targetFile, inputFilePath);
+        struct stat targetFileDescription;
+        lstat(inputFilePath, &targetFileDescription);
+        if ((file.st_ino == targetFileDescription.st_ino) && (strcmp(entryPath, targetFile) != 0)) {
+          if (option == 0)
             printf("link %s\n", entryPath);
-          }
-        }
-        if (option == 3) {
-          char linkPath[strlen(entryPath)];
-          char linkName[PATH_MAX];
-          strcpy(linkName, entryPath);
-          realpath(entryPath, linkPath);
-          unlink(entryPath);
-          int res = symlink(linkPath, linkName);
-          if (res != 0) {
-            printf("Error durint link creation");
+
+           if (option == 3) {
+            char linkPath[strlen(entryPath)];
+            char linkName[PATH_MAX];
+            strcpy(linkName, entryPath);
+            realpath(entryPath, linkPath);
+            unlink(entryPath);
+            int res = symlink(linkPath, linkName);
+            if (res != 0) {
+              printf("Error during link creation");
+            }
           }
         }
       }
@@ -137,12 +140,10 @@ int main(int argc, char*argv[]) {
   // Salviamo il path della directory e del file in input
   strcpy(targetFile, argv[1]);
   strcpy(rootDir, argv[2]);
-
   if (argc > 3) {
     if (strcmp(argv[3], "-c") == 0) option = 1;
     if (strcmp(argv[3], "-l") == 0) option = 2;
     if (strcmp(argv[3], "-s") == 0) option = 3;
-    
   }
   // Controlliamo ricorsivamente il sottoalbero
   recursivelyDirecotryExploration(targetFile, rootDir, option);
