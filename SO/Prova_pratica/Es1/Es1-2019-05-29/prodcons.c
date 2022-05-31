@@ -23,6 +23,8 @@ usare eventfd in modalità EFD_SEMAPHORE.
 #include <unistd.h>
 #include <time.h>
 
+// Ricordarsi di compilare con gcc -c -lpthread
+
 // Puntatore alla variabile condivisa
 int *val;
 
