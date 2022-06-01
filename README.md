@@ -15,9 +15,17 @@ Repository for the second year's exercises of CS course at the university of Bol
 
 ### Libraries and API
 
-* inotify: fornisce metodi per monitorare direcotory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
+* inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
 Di seguito una procedura standard per l'inizializzazione di inotify su una directory:
 ```C
+#include <sys/inotify.h>
+#include <sys/types.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <string.h>
+#include <limits.h>
+#include <unistd.h>
+
 #define EVENT_SIZE (sizeof (struct inotify_event))
 #define EVENT_BUF_LEN (1024 * ( EVENT_SIZE + 16))
 
@@ -63,6 +71,11 @@ int main(int argc, char*argv[]) {
     ...
     ...
     ...
+    i += EVENT_SIZE + event->len;
+  }
+  inotify_rm_watch(fd, wd);
+  close(fd);
+  return 0;
 }
 ```
 
@@ -73,5 +86,30 @@ int main(int argc, char*argv[]) {
 * La syscall fork crea un processo figlio del chiamante e dopo la creazione entrambi i processi continuano a eseguire il codice sotto la chiamata.
   Se il valore ritornato dalla fork è 0 allora il controllo è passato al processo creato, se è -1 c'è stato un errore e se è > 0 è il pid del processo crato(viene ritornato al chiamante).
 
+* Utilizzare lstat o stat per ricavare informazioni sul tipo di file. Il campo st_mode tramite funzioni o con & con constanti può essere utilizzato per trovare il tipo di file. 
+ES
+```C
+// Controlliamo se il file è un eseguibile
+struct stat file;
+lstat(filePath, &file);
+if (S_IXUSR & file.st_mode) {}
+```
 
+* dup2 può essere utilizzato per stampare l'output di un comando su un file. Esso prende un file descriptor che può essere creato tramite la funzione open().
+ES:
+```C
+argumentList[k] = NULL;
+char* prova[] = {"ls", "-l", NULL};
+pid_t child;
+if ((child = fork()) == 0) {
+  int fdOut = open(filePath, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR);
+  dup2(fdOut, 1);
+  close(fdOut);
+  int status= execvp(command, argumentList);
+          
+  if (status == -1) printf("errore");
+}
+
+wait(&child);
+```
 ## Web Tecnologies
