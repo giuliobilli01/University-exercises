@@ -12,7 +12,81 @@ Repository for the second year's exercises of CS course at the university of Bol
                           void *(*start_routine)(void *),
                           void *restrict arg) : questa funzione crea un nuovo thread nel processo chiamante. Il nuovo thread iniza l'esecuzione con la l'esecuzione della funzione start_routine(arg). Il thread creato termina se chiama pthread_exit() che specifica l'exit status, il quale è disponibile in un altro thread dello stesso processo che chiama pthread_join(); oppure termina quando ritorna da start_routine() o se viene cancellato con pthread_cancel().
 
+* signalfd(int fd, const sigset_t *mask, int flags): crea un file descripotr che può essere usato per accettare segnali che riguardano il chiamante. E' un'alternativa a sigwaitinfo e ha il vantaggio che il file descripotr può essere monitorato utilizzando poll(), select(), e epoll(). L'argomento mask indica i tipi di segnali che devono essere considerati. Se fd è -1 allora viene creato un nuovo file descriptor , se non è -1 deve indicare un file descriptor. Di seguito la struttura standard per utilizzare signalfd
+```C
+#include <limits.h>
+#include <sys/signalfd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+#include <signal.h>
+#include <time.h>
+#include <sys/wait.h>
+#include <sys/types.h>
 
+#define handle_error(msg) \
+           do { perror(msg); exit(EXIT_FAILURE); } while (0)
+
+#define _OPEN_SYS_ITOA_EXT
+
+int main(int argc, char*argv[]) {
+sigset_t mask;
+int sfd;
+struct signalfd_siginfo fdsi;
+ssize_t s;
+pid_t mainProc = getpid();
+// Settiamo la mask su i segnali da ricevere
+   sigemptyset(&mask);
+   sigaddset(&mask, SIGUSR1);
+   sigaddset(&mask, SIGUSR2);
+
+// Tramite sigprocmask cambiamo la signal mask
+// standard con quella appena creata
+if (sigprocmask(SIG_BLOCK, &mask, NULL) == -1)
+	handle_error("sigprocmask");
+// Creiamo il file descriptor per accetare i segnali
+// indicati dalla mask
+sfd = signalfd(-1, &mask, 0);
+if (sfd == -1)
+	handle_error("signalfd");
+// Creiamo il ciclo per ricevere i segnali tramite
+// read()
+for (;;) {
+	s = read(sfd, &fdsi, sizeof(fdsi));
+	if (s != sizeof(fdsi))
+		handle_error("read");
+	if (fdsi.ssi_signo == SIGUSR1) {
+		char fileName[10];
+		time_t currentTime = time(NULL);
+		printf("Got SIGUSR1\n");
+		// Creiamo il nome del file
+		sprintf(fileName, "%d", fdsi.ssi_pid);
+		FILE*file = fopen(fileName,"a");
+		char* time_str=ctime(&currentTime);
+		time_str[strlen(time_str)-1] = '\0';
+		fprintf(file, "USR1 %s\n", time_str);
+		fclose(file);
+	} else if (fdsi.ssi_signo == SIGUSR2) {
+		printf("Got SIGUSR2\n");
+		char fileName[10];
+		time_t currenTime = time(NULL);
+		printf("Got SIGUSR2\n");
+		// Creiamo il nome del file
+		sprintf(fileName, "%d", fdsi.ssi_pid);
+		FILE*file = fopen(fileName,"a");
+		char* time_str=ctime(&currenTime);
+		time_str[strlen(time_str)-1] = '\0';
+		fprintf(file, "USR2 %s\n", time_str);
+		fclose(file);
+	 } else {
+	    printf("Read unexpected signal\n");
+    }
+}
+```
+
+
+*kill(int pid, signal): di solito viene utilizzata per terminare processi, ma se si specifica il signal essa permette di mandare al processo identificato dal pid il signal in input. (Utile per testare programmi che ricevono segnali)
 ### Libraries and API
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
@@ -78,6 +152,8 @@ int main(int argc, char*argv[]) {
   return 0;
 }
 ```
+### Snippets:
+
 
 ### NOTE:
 
