@@ -112,4 +112,35 @@ if ((child = fork()) == 0) {
 
 wait(&child);
 ```
+* Quando si elimina un file con rm se si ha un processo che lo mantiene aperto è possibile leggere e scrivere sul file, in quanto non viene liberato il file descriptor nel caso in cui un processo lo sta utilizzando.
+
+* realpath() funziona se il nome del file da trovare è nella directory in cui è il processo che lo chiama, oppure bisogna mettergli il path per trovare il file.
+
+* Per esplorare i file all'interno di una directory conviene usare readdir dopo aver eseguito opendir(DIR* dir). Poi con una struct dirent è possibile avere informazioni sui file all'interno della directory.
+```C
+#include <dirent.h>
+#include <fcntl.h>
+
+
+DIR* targetDir = opendir(dir);
+struct dirent *entry;
+file_t files[100];
+if (targetDir == NULL){
+	perror("Unable to read directory\n");
+	exit(EXIT_FAILURE);
+}
+while ((entry=readdir(targetDir))) {
+	if (entry->d_type & DT_REG) {
+		char filePath[PATH_MAX];
+		strcpy(filePath, dir);
+		strcat(filePath, "/");
+		strcat(filePath, entry->d_name);
+		}
+}
+
+```
+* Per compilare con eventuali librerie esterne come quella del prof conviene utilizzare:
+```shell
+gcc shell.c -L/home/your_user/path_to_library/build -l:libexecs.a
+```
 ## Web Tecnologies
