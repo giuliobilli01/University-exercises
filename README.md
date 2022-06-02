@@ -16,7 +16,7 @@ Repository for the second year's exercises of CS course at the university of Bol
 ### Libraries and API
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
-Di seguito una procedura standard per l'inizializzazione di inotify su una directory(se si vogliono leggere più eventi inserire il while in un altro while (numberOfEvents = read()fd, buffer, EVENT_BUF_LEN)):
+Di seguito una procedura standard per l'inizializzazione di inotify su una directory(se si vogliono leggere più eventi inserire il while in un altro while (numberOfEvents = read(fd, buffer, EVENT_BUF_LEN)):
 ```C
 #include <sys/inotify.h>
 #include <sys/types.h>
@@ -141,6 +141,6 @@ while ((entry=readdir(targetDir))) {
 ```
 * Per compilare con eventuali librerie esterne come quella del prof conviene utilizzare:
 ```shell
-gcc shell.c -L/home/your_user/path_to_library/build -l:libexecs.a
+gcc file.c -L/home/your_user/path_to_library/build -l:libexecs.a
 ```
 ## Web Tecnologies
