@@ -202,6 +202,17 @@ if(fork() != 0) {
 	}
 }
 ```
+* Snippet per prendere comandi in input:
+```C
+// Estraiamo il comando in input
+char*args[argc];
+int i=1;
+while (i < argc && argv[i]!= NULL) {
+	args[i-1] = argv[i];
+	i++;
+}
+args[i]=NULL;
+```
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
