@@ -172,7 +172,36 @@ char filePath[PATH_MAX];
         exit(EXIT_FAILURE);
 	}
 ```
-
+* Struttura per testare i segnali utilizzando due processi in parallelo che li mandano:
+```C
+if(fork() != 0) {
+  // codice del processo principale a cui arrivano i segnali
+}else {
+// Creiamo due processi per testare i signal
+	pid_t firstProc;
+	pid_t secondProc;
+	firstProc = fork();
+	if (firstProc == 0) {
+		printf("Entered in first process with pid %d\n", getpid());
+		kill(mainProc, SIGUSR1);
+		sleep(3);
+		kill(mainProc, SIGUSR1);
+		sleep(4);
+		kill(mainProc, SIGUSR2);
+		exit(EXIT_SUCCESS);
+	}
+	secondProc = fork();
+	if (secondProc == 0) {
+		printf("Entered in second process with pid %d\n", getpid());
+		kill(mainProc, SIGUSR2);
+		sleep(3);
+		kill(mainProc, SIGUSR2);
+		sleep(4);
+		kill(mainProc, SIGUSR1);
+		exit(EXIT_SUCCESS);
+	}
+}
+```
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
