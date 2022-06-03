@@ -153,7 +153,25 @@ int main(int argc, char*argv[]) {
 }
 ```
 ### Snippets:
+* Snippet di codice per estrarre/spezzare una stringa in base a un carattere inserito attraverso strtok:
+```C
+token = strtok(lineToRead, " ");
+while (token != NULL && i <= 2) {
+		token = strtok(NULL, " ");
+}
+```
 
+* Snippet per aprire un file attraverso fopen:
+```C
+char filePath[PATH_MAX];
+	strcpy(filePath, argv[1]);
+	FILE* file= fopen(filePath, "r");
+
+	if (file == NULL) {
+		printf("File doesn't found.\n");
+        exit(EXIT_FAILURE);
+	}
+```
 
 ### NOTE:
 
@@ -218,5 +236,9 @@ while ((entry=readdir(targetDir))) {
 * Per compilare con eventuali librerie esterne come quella del prof conviene utilizzare:
 ```shell
 gcc file.c -L/home/your_user/path_to_library/build -l:libexecs.a
+```
+* Linux non ha itoa quindi si deve usare sprintf:
+```C
+sprintf(string, "%d", number_to_convert);
 ```
 ## Web Tecnologies
