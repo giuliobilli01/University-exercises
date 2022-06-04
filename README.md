@@ -120,7 +120,7 @@ for (int i=0; i < numberOfProcess; i++) {
 		}
 	}
 ```
-
+* getopt(argc, argv, "options(se un'opzione prende un valore aggiungere:)"): prende gli argomenti che iniziano con - e il possibile valore successivo viene salvato in optarg. Alla fine l'argomento successivo all'utlima opzione ha indice optind.
 ### Libraries and API
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
