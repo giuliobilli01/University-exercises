@@ -3,6 +3,18 @@ Repository for the second year's exercises of CS course at the university of Bol
 
 ## SO
 
+### Headers
+```C
+#include <stdlib.h>
+#include <stdio.h>
+#include <signal.h>
+#include <sys/wait.h>
+#include <sys/types.h>
+#include <limits.h>
+#include <sys/stat.h>
+#include <unistd.h>
+#include <string.h>
+```
 ### Syscall 
 
 * int eventfd(unsigned int initval, int flags): crea un eventfd object che può essere utilizzato per aspettare/notificare eventi. L'eventfd object contiene un unsigned int a 64 bit utilizzato come counter. Il counter viene inizializzato con il valore nel primo argomento. Come valore di ritorno, viene ritornato un file descriptor che può essere utilizzato per accedere all'eventfd object. Con la flag EFD_SEMAPHORE eventfd assume la semantica di un semaforo. Infatti se il suo counter ha un valore maggiore di 0, allora la funzione read ritorna il valore 1 e il counter viene decrementato di 1; se invece il counter è zero la chiamata di read provoca il blocco del processo finchè il counter non aumenta. La chiamata alla funzione write aggiunge l'intero da 8 byte(il buffer) al counter.
@@ -87,6 +99,27 @@ for (;;) {
 
 
 * kill(int pid, signal): di solito viene utilizzata per terminare processi, ma se si specifica il signal essa permette di mandare al processo identificato dal pid il signal in input. (Utile per testare programmi che ricevono segnali)
+
+*wait(), waitpid().. permettono di bloccare il processo chiamante finchè non ricevono un segnale da un porcesso figlio. Se un processo figlio termina con exit(stat) waitpid prenderà il valore in exit e lo salverà in status(waitpid(pid, &status, 0)) ed è possibile leggere questo valore grazie alla macro WEXITSTATUS.
+```C
+for (int i=0; i < numberOfProcess; i++) {
+		int status;
+		if (processes[i]> 0) {
+			waitpid(processes[i], &status, 0);
+			if (WIFEXITED(status)) {
+				if (WEXITSTATUS(status) == 0) {
+					printf("%s %s differ\n", file1Path, file2Path);
+					for (int k=i; k < numberOfProcess; k++){
+						kill(processes[k], SIGTERM);
+					}
+					fclose(f1);
+					fclose(f2);
+					return 0;
+				}
+			}
+		}
+	}
+```
 
 ### Libraries and API
 
@@ -304,6 +337,30 @@ while (i < argc && argv[i]!= NULL) {
 }
 args[i]=NULL;
 ```
+
+* Funzione per comparare due file settando il punto di partenza e la grandezza del blocco da controllare:
+```C
+int compareFiles(FILE* file1, FILE* file2, size_t startPoint, size_t blockSize, int processNumber) {
+	fseek(file1, startPoint, SEEK_SET);
+	fseek(file2, startPoint, SEEK_SET);
+	printf("Block size: %ld\n", blockSize);
+	char c1=getc(file1);
+	char c2=getc(file2);
+	size_t i=0;
+	while (c1 != EOF && c2 != EOF && i<=blockSize) {
+		i++;
+		printf("c1: %c id: %d \n", c1, processNumber);
+		printf("c2: %c id: %d \n", c2, processNumber);
+		if (c1 != c2) {
+			return 0;
+		}
+		c1 = getc(file1);
+		c2 = getc(file2);
+	}
+	return 1;
+}
+
+```
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
@@ -372,4 +429,11 @@ gcc file.c -L/home/your_user/path_to_library/build -l:libexecs.a
 ```C
 sprintf(string, "%d", number_to_convert);
 ```
+* Per far partire la lettura di un file da un punto diverso da quello iniziale si può utilizzare fseek(file, offset in byte che viene aggiunto alla partenza, punto di partenza). Insieme ad fseek se si usa ftell si può calcolare la dimensione di un file in byte.
+```C
+fseek(f1, 0L, SEEK_END);
+size_t sizeFile1= ftell(f1);
+
+```
+* La funzione basename(path) può essere utilizzata per estrarre il nome del file da un path.
 ## Web Tecnologies
