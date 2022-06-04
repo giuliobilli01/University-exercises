@@ -87,6 +87,7 @@ for (;;) {
 
 
 * kill(int pid, signal): di solito viene utilizzata per terminare processi, ma se si specifica il signal essa permette di mandare al processo identificato dal pid il signal in input. (Utile per testare programmi che ricevono segnali)
+
 ### Libraries and API
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
@@ -151,6 +152,44 @@ int main(int argc, char*argv[]) {
   close(fd);
   return 0;
 }
+```
+
+* timerfd: permette di creare timer identificati da un file descriptor attraversp timerfd_create. Poi si utilizza timerfd_settime() per settare i valori del timer. In particolare timerfd_settime() prende in input 4 valori, il primo il file descriptor del timer, il secondo una flag(si può settare a 0), il terzo una struttura che setta i valori del timer(it_value.tv_sec è la parte intera del valore da aspettare in secondi, it_value.tv_nsec è la parte decimale in nanosecondi). Il seguente esempio mostra come settare un timer che prende in input valori in milli secondi e setta il timer per aspettare il tempo in input:
+```C
+// Creiamo il timer e salviamo il suo file descriptor
+int timerFd=timerfd_create(CLOCK_REALTIME, 0);
+
+if (timerFd > 0) {
+	// Prendiamo il valore in input e lo convertiamo in intero
+	int timeInMs= (int)atoi(argv[1]);
+	float parteInteraSec= timeInMs/1000;
+	float parteDecimaleSec=(timeInMs % 1000)/1000;
+	float nanosec=parteDecimaleSec * 1000000000;
+	printf("Tempo in sec: %f\n Tempo in nanosec: %f\n", parteInteraSec, nanosec);
+	struct itimerspec spec;
+	// spec.it_value specifica la scadenza iniziale del timer 
+	// in secondi e in nanosecondi. Settare entrambi i valori con un valore 
+	// != 0 fa partire il timer.
+	spec.it_value.tv_sec = parteInteraSec;
+	spec.it_value.tv_nsec = nanosec;
+	//spec.it_interval se settato a 0, il timer espirerà solo
+	// una volta, mentre seù settato a un valore != 0 specifica il periodo
+	// per timer ripetuti.
+	spec.it_interval.tv_sec = 0;
+	spec.it_interval.tv_nsec = 0;
+	timerfd_settime(timerFd, 0, &spec, NULL);
+	printf("Timer started\n");
+	uint64_t buf;
+	ssize_t size;
+	size= read(timerFd, &buf, sizeof(uint64_t));
+		if (size != sizeof(uint64_t))
+			printf("Error: read\n");
+	
+	
+	printf("Timer expired after %d ms\n", timeInMs);
+	
+} 
+return 0;
 ```
 ### Snippets:
 * Snippet di codice per estrarre/spezzare una stringa in base a un carattere inserito attraverso strtok:
