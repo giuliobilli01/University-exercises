@@ -14,6 +14,12 @@ Repository for the second year's exercises of CS course at the university of Bol
 #include <sys/stat.h>
 #include <unistd.h>
 #include <string.h>
+#include <utime.h>
+#include <dirent.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <time.h>
+
 ```
 ### Syscall 
 
@@ -100,7 +106,7 @@ for (;;) {
 
 * kill(int pid, signal): di solito viene utilizzata per terminare processi, ma se si specifica il signal essa permette di mandare al processo identificato dal pid il signal in input. (Utile per testare programmi che ricevono segnali)
 
-*wait(), waitpid().. permettono di bloccare il processo chiamante finchè non ricevono un segnale da un porcesso figlio. Se un processo figlio termina con exit(stat) waitpid prenderà il valore in exit e lo salverà in status(waitpid(pid, &status, 0)) ed è possibile leggere questo valore grazie alla macro WEXITSTATUS.
+* wait(), waitpid().. permettono di bloccare il processo chiamante finchè non ricevono un segnale da un porcesso figlio. Se un processo figlio termina con exit(stat) waitpid prenderà il valore in exit e lo salverà in status(waitpid(pid, &status, 0)) ed è possibile leggere questo valore grazie alla macro WEXITSTATUS.
 ```C
 for (int i=0; i < numberOfProcess; i++) {
 		int status;
@@ -121,6 +127,28 @@ for (int i=0; i < numberOfProcess; i++) {
 	}
 ```
 * getopt(argc, argv, "options(se un'opzione prende un valore aggiungere:)"): prende gli argomenti che iniziano con - e il possibile valore successivo viene salvato in optarg. Alla fine l'argomento successivo all'utlima opzione ha indice optind.
+
+* utime(filePath, struct utimebuf): permette di cambiare il tempo di ultimo accesso e di ultima modifica di un file. Per accedere ai tempi correnti del filre si può utilizzare stat e prendere il campo st_mtime e st_atime. Es:
+```C
+while ((entry=readdir(dir)) != NULL) {
+			if (entry->d_type & DT_REG) {
+				char filePath[PATH_MAX];
+				struct utimbuf newTime;
+				strcpy(filePath, currentDir);
+				strcat(filePath, "/");
+				strcat(filePath, entry->d_name);
+				// Prendiamo il tempo di modifica corrente del file
+				struct stat fileStat;
+				stat(filePath, &fileStat);
+				// 10 giorni in secondi = 864000
+        fileStat.st_atime= fileStat.st_atime - 864000;
+        fileStat.st_mtime= fileStat.st_mtime - 864000;
+				newTime.actime = fileStat.st_atime;
+				newTime.modtime = fileStat.st_mtime;
+				utime(filePath, &newTime);
+			}
+		}
+```
 ### Libraries and API
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
