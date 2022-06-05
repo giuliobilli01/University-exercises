@@ -405,6 +405,31 @@ int compareFiles(FILE* file1, FILE* file2, size_t startPoint, size_t blockSize, 
 }
 
 ```
+### Script
+
+#### Python
+* Per esplorare i file all'interno di una singola directory utilizzare os.listdir(dir)
+```Python
+entries = os.listdir(dir)
+	for entry in entries:
+		name, ext=os.path.splitext(entry)
+		if ('.' in ext):
+			filesWithSuffix.setdefault(ext, [])
+			filesWithSuffix[ext].append(name+ext)
+		else:
+			filesWithoutSuffix.append(name)
+```
+* Per ottenere il path assoluto della directory corrente utilizzare os.getcwd(). 
+
+* setdefault permette di creare dizionari con più elementi associati alla stessa chiave:
+```Python
+filesWithSuffix={}
+filesWithSuffix.setdefault(ext, [])
+filesWithSuffix[ext].append(name+ext)
+```
+#### Bash
+
+
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
