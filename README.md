@@ -127,6 +127,22 @@ for (int i=0; i < numberOfProcess; i++) {
 	}
 ```
 * getopt(argc, argv, "options(se un'opzione prende un valore aggiungere:)"): prende gli argomenti che iniziano con - e il possibile valore successivo viene salvato in optarg. Alla fine l'argomento successivo all'utlima opzione ha indice optind.
+```C
+int option;
+while ((option= getopt(argc, argv, "j:"))!= -1) { 
+		switch(option) {
+			case 'j':
+				numberOfProcess=atoi(optarg);
+				break;
+			case ':':
+				printf("Option require a value\n");
+				break;
+			default:
+				printf("Invalid option\n");
+				exit(EXIT_FAILURE);
+		}
+	}
+```
 
 * utime(filePath, struct utimebuf): permette di cambiare il tempo di ultimo accesso e di ultima modifica di un file. Per accedere ai tempi correnti del filre si può utilizzare stat e prendere il campo st_mtime e st_atime. Es:
 ```C

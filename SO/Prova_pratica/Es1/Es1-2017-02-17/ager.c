@@ -65,7 +65,7 @@ int main(int argc, char*argv[]) {
 			}
 		}
 	} else if (argc > 1) {
-		for (int i=0; i < argc; i++) {
+		for (int i=1; i < argc; i++) {
 			struct stat fileStat;
 			if (stat(argv[i], &fileStat)==0) {
 				struct utimbuf newTime;
