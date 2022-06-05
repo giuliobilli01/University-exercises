@@ -1,6 +1,20 @@
 # University Exercises
 Repository for the second year's exercises of CS course at the university of Bologna.
 
+* [University Exercises](#university-exercises)
+   * [SO](#so)
+      * [Argomenti trattati negli esercizi](#argomenti-trattati-negli-esercizi)
+      * [Headers](#headers)
+      * [Syscall](#syscall)
+      * [Libraries and API](#libraries-and-api)
+      * [Snippets:](#snippets)
+      * [Script](#script)
+         * [Python](#python)
+         * [Bash](#bash)
+      * [NOTE:](#note)
+   * [Web Tecnologies](#web-tecnologies)
+
+
 ## SO
 
 ### Argomenti trattati negli esercizi
