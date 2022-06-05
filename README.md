@@ -3,6 +3,9 @@ Repository for the second year's exercises of CS course at the university of Bol
 
 ## SO
 
+### Argomenti trattati negli esercizi
+
+
 ### Headers
 ```C
 #include <stdlib.h>
@@ -426,6 +429,133 @@ entries = os.listdir(dir)
 filesWithSuffix={}
 filesWithSuffix.setdefault(ext, [])
 filesWithSuffix[ext].append(name+ext)
+```
+
+* per ordinare un dizionario bisogna ordinare con sorted la lista delle chiavi o quella degli elementi:
+Es:
+```Python
+def sortDictionary(dictionary):
+    # Estraiamo e ordiniamo dal dizionario i file
+		# ordiniamo in ordine alfabetico
+    sorted_keys = sorted(dictionary.keys(), key=lambda x: x.lower())
+
+    # Creiamo un dizionario ordinato
+    sorted_dict = {}
+    for key in sorted_keys:
+        sorted_dict[key] = dictionary[key]
+
+    return sorted_dict
+
+```
+
+* Per esplorare un sottoalbero di directory si utilizza os.walk. Esso per ogni direcotory restituisce i file all'interno, il path della directory e i nomi delle directory all'interno.
+Es:
+```Python
+for dirPath, dirNames, files in os.walk(sys.argv[1]):
+      # Inseriamo ogni file presente nella directory corrente nel dizionario
+      # e associamo a ogni file la directory a cui appartiene
+        for file in files:
+            lastModTime = os.path.getmtime(os.path.join(dirPath, file))
+            subTree.setdefault(lastModTime, [])
+            subTree[lastModTime].append(file)
+    sort = sorted(subTree.keys())
+    print(sort)
+    print(
+        f'\nLast modified file: {subTree[sort[-1]]}, date of modification: {sort[-1]}')
+    print(
+        f'\nFile modified earlier: {subTree[sort[0]]}, date of modification: {sort[0]}')
+```
+
+* Per ottenere l'utlimo tempo di modifica di un file in python si utilzza os.path.getmtime().
+Es:
+```Python
+lastModTime = os.path.getmtime(os.path.join(dirPath, file))
+```
+
+* Per ottenere l'ultimo tempo di accesso a un file o la data di creazione si utilizza os.stat().
+
+* Per dividere il nome di un file in nome e estensione si utilizza os.splitext(nome file)
+Es
+```Python
+fileName, fileExt = os.path.splitext(file)
+```
+* I for per andare da un valore all'altro utilizzano range(start, end, step)
+```Python
+for i in range(1, len(sys.argv), 1):
+```
+* os.scandir() restituisce un os.DirEntry che permette ad accedere a informazioni sui file all'interno di una directory. In particolare è possibile ottenere l'inode e altre informazioni.
+Es
+```Python
+ dirEntries = os.scandir(dirPath)
+    for entry in dirEntries:
+      pathname.setdefault(entry.inode(), [])
+      pathname[entry.inode()].append(os.path.join(dirPath, entry.name))
+  
+```
+* Per controllare gli elementi all'interno di una directory os.path. offre alcuni metodi come os.path.isfile per capire se un path è un file o no.
+Es
+```Python
+ if os.path.isfile(os.path.join(dir, file)):
+```
+* filecmp.cmp serve per confrontare due file, di default l'opzione shallow è True, quindi confronta la size, la data di modifica ecc ma non il contenuto effettivo. Per confrontare il contenuto bisogna mettere shallow = False.
+Es:
+```Python
+if filecmp.cmp(f, os.path.join(dir, file), shallow=False) == True:
+```
+* Per eliminare un file si utilizza os.remove(path).
+
+* Per creare un hard link si utilizza os.link(filePointedPath, nameOfLinkFile).
+
+* Per creare un symbolic link si utilizza os.symlink(filePointedPath, nameOfSymlinkFile).
+
+* Funzione per contare le linee di un file.
+```Python
+def countLines(fileName):
+  file = open(fileName, "r")
+  counter = 0
+  text = file.read()
+  textList = text.split('\n')
+
+  for lines in textList:
+    if lines:
+      counter+=1
+  return counter
+```
+* In python per convertire un tipo in un altro basta fare str(int) o int (str).
+
+* Per leggere le linee di un file si utilizza file.readline(), dopo aver aperto un file tramite open(path, mod).
+```Python
+openedFile = open(os.path.join(dirPath, file), "r")
+firstLine = openedFile.readline()
+```
+
+* Per leggere comandi scritti da linea di comando durante l'esecuzione si può utilizzare sys.stdin.readline()
+
+* Per splittare una stringa in base al carattere basta avere una stringa e fare .split("carattere su cui splittare")
+```Python
+text.split("\n")
+```
+* Un file aperto può anche essere letto tramite file.read(byte da leggere) che restituisce come stringa i byte letti. Se non si mette nulla in input il valore è -1 ovvero legge l'intero file.
+
+* Per eseguire comandi da terminale si può usare subprocess.run(command, shell=False), che restituisce un oggetto CompletedProcess al completamento. Su questo oggetto è possibile controllare il valore ritornato dal comando eseguito tramite returnValue.check_returncode().
+```Python
+returnValue = subprocess.run(commands, shell=False)
+returnValue.check_returncode()
+```
+
+* Per controllare se si ha accesso a un file in scrittura, lettura ecc si utilizza os.access(path, mod)
+
+* Per controllare se una stringa rappresenta un numero si può utilizzare stringa.isnumeric()
+
+* Per scrivere stringhe con più linee la si racchiude tra ''' '''.
+```Python
+stringa= '''
+  #include<stdlib.h>
+  #include<stdio.h>
+
+  int main() {
+    char *syscall_name[446];
+  '''
 ```
 #### Bash
 
