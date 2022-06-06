@@ -694,6 +694,14 @@ stringa= '''
     char *syscall_name[446];
   '''
 ```
+
+* Per copiare file da una cartella all'altra la libreria shutil fornisce il metodo .copy(pathfile, destpath). 
+```Python
+import shutil
+	for f in filesToCpy:
+		shutil.copy(f, destDir)
+		os.remove(f)
+```
 #### Bash
 
 
