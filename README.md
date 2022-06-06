@@ -18,8 +18,103 @@ Repository for the second year's exercises of CS course at the university of Bol
 ## SO
 
 ### Argomenti trattati negli esercizi
+* Es1-2021-09-16: Utilizzo di inotify, utilizzo di execvp per eseguire comandi con conseguente utilizzo di fork.
+```Text
+Creare una directory chiamata exec. Scrivere un programma execname che se viene aggiunto un file
+nela directory exec interpreti il nome del file come comando con parametri, lo esegua e cancelli il file.
+es: sopo aver lanciato execname:
+execname exec
+a seguito di questo comando:
+touch 'exec/echo ciao mare'
+il programma stampa:
+ciao mare
+(consiglio, usare inotify)
+```
 
+* Es2-2021-09-16: modificare Es1, scrivendo sul file, utilizzo dup2 per reindirizzare l'output.
+```Text
+modificare il programma dell'esercizio 1 per fare in modo che execname2 scriva l'output
+dell'esecuzione nel file invece che cancellarlo.
+Nell'esempio precedente il programma execname2 non emette alcun output ma il comando
+cat 'exec/echo ciao mare'
+produce come risultato:
+ciao mare
+```
+* Es3-2021-09-16: lista dei file in ordine alfabetico, utilizzo di dictionary, os walk.
+```Text
+Scrivere un programma/script che faccia la lista riscorsiva dei file in un sottoalbero riportando in
+# ordine alfabetico per nome di file in quale/quali sottodirectory compare.
+# e.g.
+# rlsr mydir
+# ciao: . ./a
+# mare: ./a ./b
+# sole: .
+```
+* Es1-2021-07-15: Utilizzo dlopen e dlsym
+```Text
+Sia dato questo programma hw.c (vi viene fornito in /public/hw.c)
+#include <stdio.h>
+int main(int argc, char*argv[]) {
+printf("hello world:");
+for(argv++, argv--; argc > 0; argv++, argc--)
+printf(" %s",*argv);
+printf("\n");
+return 0;
+}
+Il programma hw.c può essere compilato come libreria dinamica:
+gcc --shared -o hw.so hw.c
+La libreria dinamica non è un eseguibile
+$ ./hw.so 1 2 3 4
+Segmentation fault
+ma può essere caricata a tempo di esecuzione tramite dlopen. Scrivere un programma "lancia" in
+grado di eseguire il codice di hw.so
+$ ./lancia hw.so 1 2 3 4
+hello world: hw.so 1 2 3 4
+(suggerimenti: dlopen non cerca nella directory corrente, occorre passare il path assoluto della libreria.
+"main" in hw.so è una normale funzione: occorre cercare l'indirizzo della funzione main nella libreria
+ed invocarla,)
+```
+* Es2-2021-07-15: Utilizzo dlopen e dlsym con riconoscimento la libreria e eseguibile(nel caso di eseguibile va usato execvp e fork)
+```Text
+ Estendere l'esercizio 1. Il nuovo programma autolancia deve riconoscere se il primo parametro è una
+libreria dinamica o un eseguibile gestendo entrambi i casi:
+gcc -o hw hw.c
+$ ./autolancia hw.so 1 2 3 4
+hello world: hw.so 1 2 3 4
+$ ./autolancia hw 1 2 3 4
+hello world: hw.so 1 2 3 4
 
+```
+* Es3-2021-07-15 Python: Utilizzo di os.walk, di getmtime, setdefault con dictionary e sorted.
+```Text
+Scrivere uno script in grado si cercare all'interno di un sottoalbero del file system il file modificato più
+di recente e quello la cui ultima modifica è avvenuta più anticamente.
+
+```
+* Es1-2021-06-24: Utilizzo di inotify e scrittura su un'altro file con fopen
+```Text
+Usando il metodo inotify implementare il programma dircat.
+dircat ha 2 parametri: il pathname di una directory (vuota) D e di un file F.
+Ogni volta che un file viene messo in D il programma dircat aggiunge a F una riga di testata
+contenente il nome del file e ne copia il contenuto in F. Finita la copia il file che era stato messo in D
+viene cancellato (la directory D torna vuota).
+(per fare gli esperimenti si consiglia di preparare i file di prova in un'altra directory e copiarli in D)
+```
+* Es2-2021-06-24: Utilizzo inotify come prime e dup2 per indirizzare l'output sul file nel caso sia un eseguibile.
+```Text
+completare dircat. Se il file aggiunto a D è un eseguibile dircat deve inserire in F dopo la riga di testata
+l'output dell'esecuzione del nuovo file non già il suo contenuto. Completata l'esecuzione il file
+eseguibile deve venir cancellato come nell'esercizio 1.
+```
+* Es3-2021-06-24 Bash:  utilizzo di find e echo per identare file.c
+```Text
+Scrivere uno script o un programma python che corregga l'indentazione di tutti i file .c e .h presenti
+# nel sottoalbero della directory passata come parametro (la working directory se non vi sono
+# parametri).
+# Hint: il comando:
+# ex -n '+norm!gg=G' +wq prog.c
+# corregge l'indentazione del programma sorgente C prog.c.
+```
 ### Headers
 ```C
 #include <stdlib.h>
@@ -36,6 +131,8 @@ Repository for the second year's exercises of CS course at the university of Bol
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <dlfcn.h>
+#include <gnu/lib-names.h>
 
 ```
 ### Syscall 
@@ -181,6 +278,116 @@ while ((entry=readdir(dir)) != NULL) {
 				utime(filePath, &newTime);
 			}
 		}
+```
+
+* dlopen: serve per lanciare librerie/programmi da un'altro programma, si usa insieme a dlsym che permette di ottenre l'indirizzo della funzione da lanciare. Nel caso di un eseguibile per eseguirlo bisogna utilizzare execvp e fork con ./
+```C
+/*
+Sia dato questo programma hw.c (vi viene fornito in /public/hw.c)
+#include <stdio.h>
+int main(int argc, char*argv[]) {
+printf("hello world:");
+for(argv++, argv--; argc > 0; argv++, argc--)
+printf(" %s",*argv);
+printf("\n");
+return 0;
+}
+Il programma hw.c può essere compilato come libreria dinamica:
+gcc --shared -o hw.so hw.c
+La libreria dinamica non è un eseguibile
+$ ./hw.so 1 2 3 4
+Segmentation fault
+ma può essere caricata a tempo di esecuzione tramite dlopen. Scrivere un programma "lancia" in
+grado di eseguire il codice di hw.so
+$ ./lancia hw.so 1 2 3 4
+hello world: hw.so 1 2 3 4
+(suggerimenti: dlopen non cerca nella directory corrente, occorre passare il path assoluto della libreria.
+"main" in hw.so è una normale funzione: occorre cercare l'indirizzo della funzione main nella libreria
+ed invocarla,)
+ * @version 0.1
+ * @date 2022-05-25
+ * 
+ * @copyright Copyright (c) 2022
+ * 
+ */
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <dlfcn.h>
+#include <gnu/lib-names.h>
+#include <sys/types.h>
+#include <limits.h>
+#include <string.h>
+#include <unistd.h>
+
+
+int main(int argc, char*argv[]) {
+  void* handle = 0;
+  char *error = NULL;
+  char dir[PATH_MAX];
+  char actualPath[PATH_MAX+1];
+
+  getcwd(dir, sizeof(dir));
+  //printf("%s", dir);
+  strcat(dir, "/");
+  strcat(dir, argv[1]);
+  char* realPath = realpath(dir, actualPath);
+
+
+
+  handle = dlopen(realPath, RTLD_LAZY);
+  if (!handle) {
+    fprintf(stderr, "%s\n", dlerror());
+    exit(EXIT_FAILURE);
+  }
+
+  // Eliminiamo gli errori esistenti
+  dlerror();
+
+  // Chiamiamo dlsym per recuperare l'indirizzo della funzione main
+  void (*mainso)(int, char**);
+  *(void **)(&mainso) = dlsym(handle, "main");
+  error = dlerror();
+  if (error != NULL) {
+    fprintf(stderr, "%s\n", error);
+    exit(EXIT_FAILURE);
+  }
+
+  int i=1;
+  int elements=0;
+  while (argv[i] != NULL) {
+    elements++;
+    i++;
+  }
+
+  // Contiamo gli argomenti in input
+  char* arguments[elements]; 
+  i=1;
+  while (argv[i] != NULL) {
+    arguments[i-1] = argv[i];
+    i++;
+  }
+
+  // Nel caso funzioni dobbiamo dare a main i valori in input
+  arguments[i-1]=NULL;
+  (*mainso)((int)argc - 1, arguments);
+  dlclose(handle);
+  exit(EXIT_SUCCESS);
+
+}
+```
+* dup2(): permette di indirizzare l'output di un eseguibile su un file
+```C
+// fileno ritorna il file descriptor se si ha una variabile FILE*
+int fd1 = fileno(destFile);
+          pid_t child;
+          int status;
+          // esegue il file e scrive il risultato della 
+          if ((child = fork()) == 0){
+              dup2(fd1, 1);
+              close(fd1);
+              execvp(command, argumentList);
+          }
 ```
 ### Libraries and API
 
@@ -704,7 +911,132 @@ import shutil
 ```
 #### Bash
 
+* Es0: Rendete la vostra directory home inaccessibile ad altri utenti (sia in lettura che in esecuzione). Si puo’
+tenere una sola directory in /public che abbia come nome il vostro username e.g.
+“/public/giovanni.rossi” e che abbia permessi 700
+```Bash
+chmod o-rx /home/students/your.name
 
+# in /public
+mkdir your.name
+chmod 700 /public/your.name
+```
+
+* Per correggere l'indentazione di un file .c si può utilizzare il comando:
+```Bash
+ex -n '+norm!gg=G' +wq
+```
+
+* Per prendere in input il primo elemento da terminale si usa la variabile $# che indica il numero di argomenti:
+```Bash
+if [[ $# -gt 0 ]]
+then 
+  path=${1}
+fi
+
+```
+* $0 indica il nome dello shell script
+
+* find analizza ricorsivamente i path contenuti in pathlist e applica expression ad ogni file (find pathlist expression).
+Expression ha una determinata sintassi:	
+	* -name pattern: find è true se il nome del file fa match con pattern
+	* -perm permission: True se permission corrisponde ai permessi del file
+	* -print stampa il pathname del file e ritorna true
+	* -ls stampa gli attributi del file e ritorna true
+	* - user username, -uid userId True se il possessore del file è username/password
+	* -group groupname, -gid groupId True se il gruppo del file è groupname/groupId
+	* -atime | -mtime | -ctime -count True se il file è stato acceduto | modificato | oppure cambiati gli attributi negli ultimi count giorni
+	* -type b|c|d|p|f|l|s True se il file è di tipo a blocchi | a caratteri | directory | nmaned pipe | file regolare | link |socket
+	* -not, !, -a, -and, -o, -or operatori logici
+```Bash
+find $path -name "*.c" -exec ex -n '+norm!gg=G' +wq {} \;
+```
+* Per dichiarare le varaibili basta il nome, per accedere al valore bisogna usare $
+
+* Utilizzare eval per usare come comandi una variabile
+```Bash
+eval $output
+```
+* & lancia processi in parallelo
+
+* getent passwd mostra l'elenco degli utenti
+
+* Per modificare un file in loco cancellando solo determinate stringhe si può usare sed
+```Bash
+# Esempio in cui si lasciano solo le righe che contengono /home
+sed -i '\|:/home/|!d' passwd.txt
+```
+* awk: la parte dentro begin viene eseguita solo una volta all'inizio, la parte in END viene eseguita solo alla fine, la parte fuori viene eseguita su ogni riga. Per leggere le righe di un file con awk bisogna specificare il nome del file dopo ''.
+```Bash
+# Esempio con awk per dividere ogni riga del file in pezzi spezzando a ogni :
+awk '
+  {
+    str=$0
+  
+    split(str, arr, ":")
+
+    print arr[6]
+  }
+  
+  ' passwd.txt > users.txt
+```
+* Per eliminare duplicati da un file usare:
+```Bash
+awk '!seen[$0]++' realuid.txt 
+```
+* Con > si indirizza l'output su un file sovrascrivendo il contenuto, con >> si fa append
+
+* In awk $1, $2 ecc fanno riferimento alle colonne in cui si può dividere una riga.
+
+* Per scorrere gli elementi in un'array usare:
+```Bash
+# dichiaro array vuoto
+declare -a uids=()
+
+while read line; do
+  uids+=($line)
+done < realuid.txt
+
+# leggo gli elementi
+for uid in "${uids[@]}"; do
+  realCounter=0
+  effectiveCounter=0
+  savedCounter=0
+  fsysCounter=0
+```
+* Per eliminare tutte le linee vuote da un file usare:
+```Bash
+sed -i '/^$/d' list.txt
+```
+* Per creare il testo di un file bisogna scriverlo in una stringa e fare printf "$cProgram" > file.c.
+```Bash
+cProgram+='
+  int i;
+  
+  if(argc > 1) {
+    if (isNumber(argv[1])) {
+      int index = atoi(argv[1]);
+      if (index >=424) index-=90;
+      printf("%%s \\n", syscall[index]);
+      return 0;
+    }
+    else {
+      for (int i = 0; i < 357; i++) {
+        int index = i;
+        if (i >= 335) index = i + 90;
+        if(strcmp(argv[1], syscall[i])==0) {
+          printf("%%d \\n", index);
+          return 0;
+        }
+      }
+    }
+    printf("Error, syscall not found");
+    return 1;
+  }
+}
+'
+printf "$cProgram" > file.c
+``` 
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
