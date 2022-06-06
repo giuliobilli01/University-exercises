@@ -28,7 +28,7 @@ def main():
 			filesWithSuffix.setdefault(ext, [])
 			filesWithSuffix[ext].append(name+ext)
 		else:
-			filesWithoutSuffix.append(name);
+			filesWithoutSuffix.append(name)
 	
 	extensions=filesWithSuffix.keys()
 	for ext in extensions:
