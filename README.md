@@ -422,6 +422,129 @@ int compareFiles(FILE* file1, FILE* file2, size_t startPoint, size_t blockSize, 
 }
 
 ```
+
+* Snippet in C per esplorare un sottoalbero partendo da una directory root
+```C
+void recursivelyDirectoryExploration(char* rootDir) {
+	// Lista per salvare gli inode dei file
+	// incontrati
+	DIR* dir=opendir(rootDir);
+	if (dir == NULL) {
+		printf("Error: unable to open directory \"%s\"\n", rootDir);
+		exit(EXIT_FAILURE);
+	}
+	struct dirent* entry;
+
+	while ((entry =readdir(dir))!= NULL) {
+		// Esplorando il sottoalbero dobbiamo contare i
+		// file
+		
+		// Se incontriamo una directory
+		// dobbiamo entrarci
+		if (entry->d_type & DT_DIR) {
+			char newDir[PATH_MAX];
+			strcpy(newDir, rootDir);
+			strcat(newDir, "/");
+			strcat(newDir, entry->d_name);
+			if(!(strcmp(entry->d_name, "..")==0) && !(strcmp(entry->d_name, ".")==0)) {
+				dirCounter++;
+				recursivelyDirectoryExploration(newDir);
+			}
+			// Se è un file regolare
+		} else if(entry->d_type & DT_REG) {
+			
+		}
+	}
+}
+
+```
+
+* Struttura base per creare liste in C:
+```C
+typedef struct inodeList {
+	ino_t inode;
+	struct inodeList* next;
+}inodeList;
+
+typedef inodeList* inodeList_ptr;
+
+int isElementInList(inodeList* head, ino_t element) {
+	printf("Element inode: %ld \n",element);
+	if(head == NULL) {
+		return 0;
+	}else {
+		inodeList* tmp = head;
+		while (tmp!=NULL) {
+			if (tmp->inode == element) {
+				printf("List inode: %ld", tmp->inode);
+				return 1;
+
+			}
+				
+			tmp=tmp->next;
+		}
+		return 0;
+	}
+}
+
+void insertElementTail(inodeList_ptr* head, ino_t inode) {
+	inodeList_ptr newNode = (inodeList_ptr)malloc(sizeof(inodeList));
+	newNode->inode = inode;
+	newNode->next = NULL;
+
+	if (*head == NULL) {
+		*head = newNode;
+		return;
+	}
+	inodeList_ptr tmp = *head;
+	while (tmp->next != NULL) {
+		tmp=tmp->next;
+	}
+	tmp->next = newNode;
+	return;
+}
+
+void insertElementHead(inodeList_ptr* head, inot_t inode) {
+	inodeList_ptr newNode = (inodeList_ptr)malloc(sizeof(inodeList));
+	newNode->inode = inode;
+	newNode->next = NULL;
+
+	if (*head == NULL) {
+		*head = newNode;
+		return;
+	}
+	newNode->next = *head;
+	*head = newNode;
+
+}
+
+void removeElement(inodeList_ptr* head, ino_t inode) {
+	if (*head == NULL) {
+		return;
+	}
+
+	inodeList_ptr tmp = *head;
+	inodeList_ptr prev = NULL;
+
+	if (tmp->inode == inode) {
+		*head=tmp->next;
+		free(tmp);
+		return; 
+	}
+
+	while (tmp != NULL) {
+		if (tmp->inode == inode) {
+			prev->next = tmp->next;
+			free(tmp);
+			return;
+		}
+		prev=tmp;
+		tmp=tmp->next;
+	}
+
+}
+```
+
 ### Script
 
 #### Python
