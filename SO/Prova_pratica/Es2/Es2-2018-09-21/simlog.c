@@ -41,7 +41,7 @@ int main(int argc, char*argv[]) {
 	char* token;
 	int i=0;
 	int timeToWait=0;
-	
+	// fgets legge il numero di caratteri inserito
 	while(fgets(lineToRead, 150, file)!= NULL ) {
     strcpy(lineToStamp, lineToRead);
 		// Dobbiamo estrarre dalla stringa il tempo di ogni log

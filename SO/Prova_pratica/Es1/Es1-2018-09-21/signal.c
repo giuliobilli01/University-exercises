@@ -11,10 +11,6 @@
  *	USR2 Fri Sep 21 10:41:26 CEST 2018
  *
  *
- *
- *
- *
- *
  */
 
 #include <limits.h>
