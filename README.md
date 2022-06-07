@@ -884,7 +884,7 @@ int main(int argc, char*argv[]) {
 
 }
 ```
-* dup2(): permette di indirizzare l'output di un eseguibile su un file
+* dup2(): permette di indirizzare l'output di un eseguibile su un file ma serve per duplicare il file descriptor di un file
 ```C
 // fileno ritorna il file descriptor se si ha una variabile FILE*
 int fd1 = fileno(destFile);
@@ -897,7 +897,56 @@ int fd1 = fileno(destFile);
               execvp(command, argumentList);
           }
 ```
+* fork(): crea un processo figlio copia del processo che ha invocato la fork. La fork restituisce zero quando è nel processo creato e il pid del processo quando è nel processo che ha chiamato la fork. Il processo creato esegue in modo concorrente con il processo ce lo ha creato. Quando si usa se una parte va eseguita solo nel processo padre inserire il controllo if (fork() > 0).
 
+* vfork(): crea un processo figlio e blocca il padre e il suo comportamento è indefinito se modifica un dato che non sia una variabile di tipo pid_t o torna nella funzione in cui è stata chiamata oppure chiama qualsiasi altra funzione prima di chiamare _exit().
+
+* exit(int status): Termina il processo chiamante e status è ritornato al processo padre.
+
+* wait(int *status), waitpid(pid_t pid, int* status), waitid(int options): aspettano che un processo cambi status. Wait e waitpid sospendono l'esecuzione del chiamante e aspettano un cambiamento in uno dei figli del chiamante e lo stato con cui terminano viene inserito in status. Waitid permette un controllo più specifico sul quale cambiamento di stato aspettare.
+
+* wait3(), wait4: si possono utilizzare per ottenere informazioni in più sul child che stanno aspettando, in quanto restituiscono anche una struct rusage {} che da alcune informazioni su cosa è avvenuto durante la sua esecuzione.
+
+* nice(int inc): permettte di cambiare la priorità del processo chiamante sommando inc alla priorità del processo(più alto è il valore più è bassa la priorità)(solo il super user può farlo)(syscall associate fork(2), getpriority(2), setpriority(2), capabilities(7), renice(1))
+
+* getpriority(int wich, id_t who): restituisce la priorità del programma chiamante. La priorità di default è 0(può abbassarsi). La chiamata restituisce la priorità più alta del processo che corrisponde all'ID.
+
+* setpriority(): setta la priorità del processo in input.
+
+* getppid(): ritorna l'ID del padre del processo chiamante.
+
+* setpgid, getpgid, setpgrp, getpgrp - set/get process group id
+
+* getsid(): ritorna il session ID ovvero l'ID del gruppo del leader della session.
+
+* openat(): apre un file relativo a un file descriptor di una directory. Per ottenere il file descriptor si può usare int dirfd(DIR *dirp);
+
+* readv(): the readv() system call reads iovcnt buffers from the file associated with the file descriptor fd into the buffers described by iov ("scatter input").
+
+* writev(): The writev() system call writes iovcnt buffers of data described by iov to the file associated with the file descriptor fd ("gather output").
+
+* pread() reads up to count bytes from file descriptor fd at offset offset (from the start of the file) into the buffer starting at buf.  The file offset is not changed.
+
+* pwrite(): writes up to count bytes from the buffer starting at buf to the file descriptor fd at offset  offset.	The  file  offset  is  not
+       changed. The file referenced by fd must be capable of seeking.
+
+* lseek():  The lseek() function repositions the offset of the open file associated with the file descriptor fd to the argument offset according to the directive whence as follows
+
+* fcntl(): permette di manipolare il file descriptor
+
+* sendfile(): copia dati da un file descriptor a un'altro
+
+* chdir(): changes the current working directory of the calling process to the directory specified in path.
+
+* chown, fchown, lchown: change ownership of a file
+
+* access: controlla i permessi di accesso a un file
+
+* umask(): è utilizzata per settare la mode creation del file chiamante
+
+* chroot(): cambia la root directory del processo chiamante
+
+* ustat(): restituisce valori statistici sul file system
 ### Libraries and API
 
 
