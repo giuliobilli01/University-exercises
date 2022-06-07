@@ -42,7 +42,7 @@ int main(int argc, char*argv[]) {
 	// Creiamo il file in /tmp/countpid in cui salvare il pid
 	FILE*pidFile=fopen("/tmp/countpid.txt", "w");
 	if (pidFile == NULL) {
-		printf("Error: i don't know why");
+		printf("Error: prova dita ma buco");
 		exit(EXIT_FAILURE);
 	}
 	fprintf(pidFile, "%d", mainProc);

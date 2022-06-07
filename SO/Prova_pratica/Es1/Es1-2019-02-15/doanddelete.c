@@ -44,13 +44,14 @@ int main(int argc, char*argv[]) {
   char dir[PATH_MAX];
   strcpy(dir, argv[1]);
 
-  // Controlliamo se la directory esiste ed è vuota
+  // Controlliamo se la directory esiste
   DIR* checkDir = opendir(dir);
   if (checkDir == NULL) {
     printf("Error: directory \"%s\" does not exist\n", dir);
     exit(EXIT_FAILURE);
   }
 
+  //  ed è vuota
   struct dirent *d;
   int n=0;
   while ((d = readdir(checkDir)) != NULL) {

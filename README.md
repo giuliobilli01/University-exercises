@@ -115,6 +115,342 @@ Scrivere uno script o un programma python che corregga l'indentazione di tutti i
 # ex -n '+norm!gg=G' +wq prog.c
 # corregge l'indentazione del programma sorgente C prog.c.
 ```
+* Es1-2020-02-21: Utilizzo di readlink, symlink per creare un link simbolico e realpath per ottenere il path completo.
+```Text
+Il comando abslink, da implementare, deve sostituire un link simbolico con uno equivalente che sia
+un riferimento ad un path assoluto.
+Ad esempio: se mylink e' nella directory /home/user e punta a myfile, 'abspath mylink" deve sostituire
+mylink con un symbolic link a /home/user/myfile.
+Hint: considerate l'uso della funzione realpath.
+```
+
+* Es2-2020-02-21: Utilizzo di opendir e readdir per esplorare una directory
+```Text
+Scrivere il comando absls che mostri per ogni file della directory passata come parametro il path
+completo di ogni file (mostrando al posto dei link simbolici il path completo dei file puntati)
+```
+* Es3-2020-02-21: Utilizzo di un dizionario di listdir, di splitext e di sorted.
+```Text
+Scrivere un programma python o uno script bash che produca il listato del contenuto di una directory
+# in ordine di suffisso.
+```
+* Es1-2020-01-17: Esplorazione ricorsiva del sottoalbero, stat e lstat, realpath
+```Text
+Scrivere un programma searchlink che dati due parametri (nell'ordine un file f ed una directory d)
+metta in output l'elenco dei path all'interno dell'albero che ha radice in d che fanno riferimento ad f
+o come link fisico o come link simbolico.
+es:
+searchlink myfile mydir
+link a
+link d/b
+symlink e/s
+significa che dir/a e dir/d/b si riferisono a f come link fisici mentre dir/e/s e' un link simbolico che punta
+ad f
+```
+* Es2-2020-01-17: Visita ricorsiva del sottoalbero, copia di file al posto dei link, sostituzione link fisici e linnk simbolici, lstat.
+```Text
+Estendere il programma precedente in modo che accetti le seguenti opzioni:
+-c copia il file originale al posto di tutti i link
+-l trasforma tutti i link in link fisici
+-s trasforma tutti i link in link simbolici
+```
+* Es3-2020-01-17 Bash: Presa di tutti gli argomenti in input da terminale e creazione stringa in output
+```Text
+Scrivere un programma python o uno script bash che consenta di lanciare parallelamente comandi
+# para.py sleep 20 // ls -l // ps // sleep 3
+# para.sh sleep 20 // ls -l // ps // sleep 3
+# deve eseguire concorrentemente i vari comandi separati da // e aspettare la terminazione di tutti
+```
+* Es1-2019-09-18: Lancio di processi in parallelo, utilizzo di fork e wait(si ricorda che i processi generati con fork eseguono in modo concorrentemente)
+ ```Text
+ scrivere un programma para per lanciare parallelamente comandi
+para sleep 20 // ls -l // ps // sleep 3
+deve eseguire concorrentemente i vari comandi separati da // e aspettare la terminazione di tutti
+ ```
+* Es2-2019-09-18: Lancio di processi in parallelo con un limite massimo di processi attivi, utilizzo di fork e wait(si ricorda che i processi generati con fork eseguono in modo.
+ ```Text
+ estendere para a paran che ha un parametro che indica il numero massimo di esecuzioni concorrenti:
+paran 3 sleep 20 // ls -l // ps // sleep 3
+al max esegue 3 comandi in parallelo, quindi esegue i primi 3 comandi, qundo uno fra essi termina
+ne attiva un successivo e cosi' via.
+ ```
+* Es3-2019-09-18: Utilizzo di os.walk e di os.scandir per trovare i link fisici attraverso lo stesso inode.
+```Text
+Scrivere un programma python o uno script bash che faccia l'elenco dei pathname in un sottoalbero
+che sono link fisici fra loro:
+e.g.
+searchln mydir
+mydir/a mydir/d/b mydir/qq
+mydir/uno mydir/due
+significa che i path mydir/a mydir/d/b mydir/qq fanno riferimento allo stesso file, cosi' come mydir/uno
+mydir/due indicano uno stesso file (diverso dal precedente).
+Nel sottoalbero possono esserci molteplici altri file, se hanno un solo nome non vengono indicati
+nell'output.
+```
+
+* Es1-2019-07-16: manca
+
+* Es3-2019-07-17: Utilizo di listdir, os.path.isfile per controllare se è un file, filecmp.cmp per comparare il contenuto dei file.
+```Text
+Scrivere un programma python o uno script bash che cerchi tutti i file con uguale contenuto in una
+# directory. I file con lo stesso contenuto devono diventare link fisici a un unico file.
+```
+* Es1-2019-06-19: Utilizzo di prctl con PR_SET_CHILD_SUBREAPER per cambiare il processo a cui va l'exit status di un porcesso figlio che termina.
+```Text
+Normalmente se un processo è orfano l'exit status viene ricevuto da init o systemd (processo 1).
+Usando l'opzione PR_SET_CHILD_SUBREAPER della system call prctl(2) è possibile cambiare questo
+comportamento.
+Scrivere un programma che crei un processo figlio e uno nipote (tramite fork). Fare in modo che
+termini prima il figlo e poi il nipote.
+Il programma deve mostrare che con prctl/PR_SET_CHILD_SUBREAPER la terminazione del nipote
+viene rilevata dal nonno.
+```
+* Es2-2019-06-19: Utilizzo di prctl con PR_SET_NAME che cambia il nome con cui vengono visti i processi in esecuzione.
+```Text
+Tramite l'opzione PR_SET_NAME sempre di prctl fare in modo che con il comando "ps -Leo pid,comm"
+i nomi dei tre rpocessi creati dall'esercizio 1 compaiano con nome "nonno","figlio" e "nipote".
+```
+* Es3-2019-06-19 Python: Utilizzo di os.walk, os.splitext per esplorare un sottoalbero e contare le righe dei file tramite file.read e (str).split per separare le righe.
+```Text
+Scrivere un programma python o uno script bash che calcoli il numero di righe presenti in tutti i file .c,
+ .h, e Makefile (o makefile).
+ Prima deve stampare ogni per ogni file .c il numero di righe, poi il totale righe per tutti i file .c,
+ similmente per i file .h e i makefile e alla fine il totale generale;
+ e.g.
+ primo.c 100
+ secondo.c 150
+ dir/terzo.c 120
+ tot .c 370
+ primo.h 10
+ dir/terzo.h 24
+ tot .h 34
+ Makefile 44
+ dir/makefile 22
+ tot Makefile 66
+ tot source 470 
+```
+* Es1-2019-05-29: Utilizzo di pthread_create per creare thread che eseguono processi separati, pthread_join per aspettare la terminazione del thread in input e utilizzo di eventfd per creare semafori.
+```Text
+Usando pthread_create occorre creare due thread che chiameremo produttore e consumatore.
+Il thread produttore ripetutamente genera un numero causuale, lo stampa lo mette in una variabile
+condivisa con il consumatore e attende (ritardo casuale). Il thread consumatore legge dalla variabile
+condivisa i valori e li stampa (anche il consumatore attende per un periodo casuale prima di tentare di
+leggere il valore successivo)
+Ogni valore prodotto deve venir consumato una e una sola volta, per la sincronizzazione si richiede di
+usare eventfd in modalità EFD_SEMAPHORE.
+```
+* Es2-2019-05-29: shell minimale con libreria del prof, utilizzo di s2argv per ottenere un array di puntatori a stringhe per execvp. Utilizzo di fork e execvp.
+```C
+Scrivere una shell minimale usando la libreria s2argv/execs (da scaricare da github).
+La shell deve eseguire comandi con o senza parametri e terminare con logout o fine del file di input
+```
+* Es3-2019-05-29 Bash: Estrazione informazioni da file /proc/pid/status. Utilizzo di awk per per estrapolare elementi dalle righe, sed per eliminare elementi dalle righe. Utilizzo di cat per prendere il contenuto di un file, aek per prendere solo una colonna  e per eliminare le righe duplicate.
+```Text
+I file /proc/*/status contengono importanti informazioni relative ai processi in esecuzione.
+In particolare una riga contiene la costante "Uid:" seguita da quattro numeri (sono l'uid reale, effettivo, salvato e del
+ file system per il processo in considerazione).
+Scrivere un programma python o uno script bash che per ogni utente che ha un ruolo in almeno un processo
+ indichi quanti processi sono attivi che hanno quell'utente come reale, effettivo, salvato o del file system.
+ esempio di output:
+ 0 10 12 12 12
+ 1000 5 3 3 3
+ (l'utente 0 ha 10 processi come utente reale, 12 come effettivo, salvato e del file system. l'utente 1000 ha 5
+ processi come utente reale e 3 come effettivo, salvato e del file system. Per esempio questo caso si riferirebbe a
+ 10 processi di root, 5 dell'utente 1000 dei quali 2 sono setuid root).
+
+```
+* Es1-2019-02-15: Controllo directory vuota, utilizzo opendir, readdir , inotify nel caso vengano aggiunti file alla directory, stat, fork e wait.
+```Text
+Questo programma viene attivato con un unico parametro che deve essere una directory vuota
+(controllare la coerenza del parametro!).
+Quando viene aggiunto un file alla directory questo viene eseguito e cancellato.
+```
+
+* Es2-2019-02-15: uguale all Es1 in quanto fork esegue già in modo concorrente.
+```C
+Si estenda il programma dell'esercizio 1 in modo che se vengono aggiunti molteplici file questi
+vengano eseguiti in modo concorrente.
+```
+
+* Es3-2019-02-15: Apertura file tramite open, lettura di ogni riga tramite file.readlines, split delle righe tramite str.split e stampa di un programma C su un file C creato.
+```Text
+Scrivere uno script bash o un programma python che preso in input il file /usr/include/x86_64-linux-
+gnu/asm/unistd_64.h crei in output un file .C corretto che contenga la definizione di un array:
+ char *syscall_name[] = {
+ "read",
+ "write",
+ ....
+ }
+ Il vettore syscall_name deve far corrispondere al numero di ogni system call il suo nome come
+ stringa.
+```
+
+* Es1-2019-01-16: Utilizzo di inotify alla cancellazione di un file e utilizzo di creat. Ricordarsi che se un file è aperto da un processo anche se viene eliminato è ancora leggibile.
+```Text
+Usando inotify creare il programma neverm che controlli una directory. Ogni volta che viene
+ 	cancellato un file nella directory sotto osservazione crei un file vuoto di uguale nome. Per esempio
+ 	eseguendo
+ 	neverm dir
+ 	dove dir e' una directory contenente i file a, b, c, anche a seguito dei comandi 'rm dir/a' e 'rm dir/b',
+ 	dir deve contenere sempre i file a, b e c, a e b saranno file vuoti.
+```
+
+* Es2-2019-01-16: utilizzo di readdir e apertura di più file.
+```Text
+modificare neverm per fare in modo che neverm ripristini anche il contenuto dei file a seguito della
+cancellazione (il modo è lasciato alla creatività del candidato)
+```
+
+* Es3-2019-01-16: getent passwd, awk per prendere solo alcuni elementi
+```Text
+getent passwd
+ mostra l'intero elenco degli utenti del sistema distribuito del dipartimento in formato passwd(5).
+  Scrivere uno script o un programma Python che elaborando opportunamente l'output di 'getent
+ passwd' conti gli utenti a seconda della directory dove e' posta la home:
+ e.g.
+ /home/faculty 65
+ /home/students 2496
+ ...
+ e cosi' via. Il programma deve poter funzionare in sistemi che usano una diversa suddivisione delle
+ home degli utenti (cioé nel programma non devono comparire costanti come /home/faculty o simili,
+ le categorie devono venir calcolate a partire dal campo 'home' del formato)
+```
+* Es1-2018-09-21: Utilizzo signalfd, e di conseguenza sigemptyset sigprocmask, sigaddset e kill(utilizzata per mandare segnali). 
+```Text
+Lo scopo di questo esercizio è di scrivere un programma che usando la system call signalfd quando riceve un
+ 	segnale SIGUSR1 o SIGUSR2 scriva in un file della directory corrente con nume uguale al pid del processo che ha
+ 	inviato il segnale, il tipo di segnale ricevuto e l'ora esatta di ricezione del segnale. (se il file non esiste deve essere
+ 	creato).
+ 	un esempio di file risultante potrebbe essere:
+ 	$ cat 20231
+ 	USR1 Fri Sep 21 10:40:56 CEST 2018
+ 	USR1 Fri Sep 21 10:40:58 CEST 2018
+ 	USR2 Fri Sep 21 10:41:26 CEST 2018
+```
+* Es2-2018-09-21: Utilizzo di fgets per leggere un file, strtok per dividere in pezzi una riga, atoi per convertire stringa in numero e sleep per mettere in pausa il processo.
+```Text
+Dato un estratto di un file di log come questo:
+ Sep 20 19:58:32 eipi ntpd[2051]: Listen normally on 99 eth0 [fe80::8456:a70]:123
+ Sep 20 19:58:32 eipi ntpd[2051]: new interface(s) found: waking up resolver
+  Sep 20 19:58:34 eipi ntpd[2051]: Soliciting pool server 151.3.106.211
+ 	Sep 20 19:58:35 eipi ntpd[2051]: Soliciting pool server 94.177.187.22
+ 	Sep 20 19:58:48 eipi ntpd[2051]: Soliciting pool server 80.211.155.206
+ 	Sep 20 19:58:49 eipi ntpd[2051]: Soliciting pool server 212.45.144.206
+ 	Scrivere un programma che lo mostri alla stessa velocita' allla quale e' stato generato.
+ In questo caso dovrebbe scrivere le prime dur righe, attendere 2 secondi, mostrare la terza, dopo un secondo la
+ quarta quindi dopo una attesa di 13 secondi la quinta e la sesta dopo un ulteriore secondo.
+```
+Es3-2018-09-21: utilizzo di os walk, controllo se una sottostringa è presente in una stringa.
+```Text
+Scrivere un programma python o uno script bash che trovi in un sottoalbero tutti i file che hanno come primi
+ caratteri '#!' e produca una tabella che elenchi tutti i pathname dei file trovati catalogando insieme i file che
+ hanno la stessa prima riga di testo.
+ es:
+ !/bin/bash: first.sh myscript
+ !/usr/bin/env python: prog.py
+```
+
+* Es1-2018-07-18: Utilizzo di signalfd, sigemptyset ecc per ricevere i segnali e contare quanti sono.
+```Text
+Lo scoopo di questo esercizio è di scrivere un programma che conti quanti segnali di tipo SIGUSR1 e quanti di tipo
+ 	SIGUSR2 riceve. Ogni volta che riceve un segnale di tipo SIGUSR1 deve aumentare un contatore di 1, ogni volta
+ 	che riceve SIGUSR2 deve decrementare di 1 il contatore. A ogni variazione del contatore il programma stampa il
+ valore. Questo programma deve essere realizzato usando la system call signalfd.
+```
+* Es2-2018-07-18: creazione file in /tmp/, utilizzo signalfd.
+```Text
+Estendere la soluzione dell'esercizio 1: Modificare il programma dell'esercizio 1 per fare in modo che alla partenza
+ 	scriva il proprio pid nel file /tmp/countpid. Scrivere poi un secondo programma che lanci il comando con argomenti
+ 	passato come parametro, prima di eseguire il comando deve mandare SIGUSR1 al programma dell'esercizio 1, al
+ 	termine deve mandare SIGUSR2.
+ 	e.g.
+ 	count sleep 20
+ 	... spedisce SIGUSR1, esegue sleep 20, manda SIGUSR2. In questo modo il programma dell'esercizio 1 dovrebbe
+	contare quanti comandi lanciati con il prgramma count sono in corso di esecuzione.
+```
+* Es3-2018-07-18: Utilizzo subprocess.run per creare una shell minimale, prendere comandi in input durante l'esecuzione.
+```Text
+crivere una shell minimale in Python usando la subprocess.run con parametro shell=False.
+La shell deve eseguire comandi con o senza parametri e terminare con logout o fine del file di input (^D)
+
+```
+* Es1-2018-06-22: utilizzo timerfd per creare uno sleep che aspetta in millisecondi. Ricordarsi che i nanosecondi non sono il numero da aspettare in nanosecondi ma la parte decimale del tempo da aspettare in sec.
+```Text
+Lo scopo di questo esercizioè di scrivere msleep. msleep si comporta come sleep(1) ma invece di attendere il
+ 	numero di secondi indicati come parametro deve aspettare il numero di millisecondi indicati come parametro.d
+ 	es:
+ 	msleep 2340
+ 	completa la sua esecuzione in 2340 millisecondi alias 2.34 secondi.
+ 	La msleep deve essere implementata usando i timerfd (v. timerfd_create(2))
+```
+
+* Es2-2018-06-22: Es1 con più timer contemporaneamene, si utilizza poll per aspettare i vari timer e stampare alla fine di ognuno di essi.
+```Text
+Estendere la soluione dell'esercizio 1: mmsleep (multimsleep) ammette molteplici parametri.
+ 	msleep 1234 3456 2345
+ 	allo scadere di 1234 millisecondi stampa 1234, allo scadere di 2345 millisecondi stampa 2345 e infine a 3456
+	millisecondi dalla attivazione stampa 3456 ed esce.
+ 	Questo programma deve essere implementato creando un timerfd per ogni parametro e usando poll(2) per
+ 	aspettare il prossimo evento.
+  
+```
+* Es3-2018-06-22 Python: shell minimale in python
+
+* Es3-2018-05-29 Bash: Apertura file /proc/*/status, comando ps per vedere i pid dei processi in esecuzione, utilizzo di awk per prendere alcune colonne, e sed per cancellarne alcune. Cat per leggere file e awk per cancellare i duplicati.
+```Text
+Esercizio 3: Script bash o Python: (10 punti):
+I file /proc/*/status contengono importanti informazioni relative ai processi in esecuzione.
+ In particolare una riga contiene la costante "Uid:" seguita da quattro numeri (sono l'uid reale, effettivo, salvato e del# file system per il processo in considerazione).
+ Scrivere un programma python o uno script bash che per ogni utente che ha un ruolo in almeno un processo
+ indichi quanti processi sono attivi che hanno quell'utente come reale, effettivo, salvato o del file system.
+ esempio di output:
+ 0 10 12 12 12
+ 1000 5 3 3 3
+ (l'utente 0 ha 10 processi come utente reale, 12 come effettivo, salvato e del file system. l'utente 1000 ha 5
+ processi come utente reale e 3 come effettivo, salvato e del file system. Per esempio questo caso si riferirebbe a
+ 10 processi di root, 5 dell'utente 1000 dei quali 2 sono setuid root).
+
+```
+Es1-2018-02-29: programma per confrontare file in modo parallelo. I processi figli si dividono il file da controllare. Utilizzo di fseek per settare la posizione in cui partire nel file, ftell per trovare la dimensione in byte del file, waitpid per aspettare la terminazion dei processi e le macro WIFEXITED per vedere se il processo ha terminato con exit e WEXITSTATUS per leggere lo status. Kill per terminare il processo.
+```Text
+Fare un programma di confronto parallelo di file.
+ 	pcmp file1 file2
+ 	non stampa nulla se i due file sono uguali altrimenti stampa "file1 file2 differ". pcmp deve creare due processi figli;
+ 	mentre un processo controlia la prima meta’ del file, l'altro deve controllare l’altra meta’.
+ 	Se un dei due processi figli trova una differenza, termina immediatamente segnalandolo al padre con opportuno
+ 	valore di ritorno. In questo caso il padre deve terminare l'altro processo.
+ 
+```
+* Es2-2018-02-29: es1 con più processi che si dividono i file. tilizzo di un array di processi e ciclo per farli partire.
+
+
+
+* Es3-2018-02-18 Python: utilizzo di .isnumeric e di os.access per vedere il tipo di accesso a un file. 
+
+* Es1-2017-02-17: Utilizzo di utime, stat per accedere ai tempi di modifica e struct utimbuf.
+```Text
+Scrivere un programma ager in grado di invecchiare file.
+ 	Il programma deve poter prendere una lista di file come parametri o nessun parametro, nel qual caso invecchierà
+ 	tutti I file della directory corrente. “invecchiare” significa predatare il tempo di ultimo accesso e di modifica di 10
+ 	giorni.
+ 	Esempio:
+ 	$ ls -l file
+ 	-rw-r--r-- 1 renzo renzo 0 Feb 17 09:07 file
+ 	$ ./ager file
+ 	$ ls -l file
+ 	-rw-r--r-- 1 renzo renzo 0 Feb 7 09:07 file
+```
+
+* Es2-2017-02-17: Es1 con utilizzo di getopt per gestione opzioni.
+
+* Es3-2017-02-17: utilizzo splitext e dictionary
+
+* Es1-2017-0-17: Gestione lista, esplorazione ricorsiva del sottoalbero
+
+* Es2-2017-01-17:  Controllo delle della quantità di hard link associati a ogni file. Gestione lista
+
+* Es3-2017-01-17: Funzione merge, utilizzo dizionari e liste, os.remove per rimuovere file.
+
 ### Headers
 ```C
 #include <stdlib.h>
@@ -133,18 +469,119 @@ Scrivere uno script o un programma python che corregga l'indentazione di tutti i
 #include <time.h>
 #include <dlfcn.h>
 #include <gnu/lib-names.h>
+#include <pthread.h>
+#include <sys/eventfd.h>
+#include <sys/inotify.h>
+#include <sys/timerfd.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include <poll.h>
 
 ```
 ### Syscall 
 
-* int eventfd(unsigned int initval, int flags): crea un eventfd object che può essere utilizzato per aspettare/notificare eventi. L'eventfd object contiene un unsigned int a 64 bit utilizzato come counter. Il counter viene inizializzato con il valore nel primo argomento. Come valore di ritorno, viene ritornato un file descriptor che può essere utilizzato per accedere all'eventfd object. Con la flag EFD_SEMAPHORE eventfd assume la semantica di un semaforo. Infatti se il suo counter ha un valore maggiore di 0, allora la funzione read ritorna il valore 1 e il counter viene decrementato di 1; se invece il counter è zero la chiamata di read provoca il blocco del processo finchè il counter non aumenta. La chiamata alla funzione write aggiunge l'intero da 8 byte(il buffer) al counter.
+* int eventfd(unsigned int initval, int flags): crea un eventfd object che può essere utilizzato per aspettare/notificare eventi. L'eventfd object contiene un unsigned int a 64 bit utilizzato come counter. Il counter viene inizializzato con il valore nel primo argomento. Come valore di ritorno, viene ritornato un file descriptor che può essere utilizzato per accedere all'eventfd object. Con la flag EFD_SEMAPHORE eventfd assume la semantica di un semaforo. Infatti se il suo counter ha un valore maggiore di 0, allora la funzione read ritorna il valore 1 e il counter viene decrementato di 1; se invece il counter è zero la chiamata di read provoca il blocco del processo finchè il counter non aumenta. La chiamata alla funzione write aggiunge l'intero da 8 byte(il buffer) al counter(se EFD_SEMAPHRE è attivo sembrerebbe incrementare di 1 il counter).
 
 * int pthread_create(pthread_t *restrict thread,
                           const pthread_attr_t *restrict attr,
                           void *(*start_routine)(void *),
-                          void *restrict arg) : questa funzione crea un nuovo thread nel processo chiamante. Il nuovo thread iniza l'esecuzione con la l'esecuzione della funzione start_routine(arg). Il thread creato termina se chiama pthread_exit() che specifica l'exit status, il quale è disponibile in un altro thread dello stesso processo che chiama pthread_join(); oppure termina quando ritorna da start_routine() o se viene cancellato con pthread_cancel().
+                          void *restrict arg) : questa funzione crea un nuovo thread nel processo chiamante. Il nuovo thread iniza l'esecuzione con la l'esecuzione della funzione start_routine(arg). Il thread creato termina se chiama pthread_exit() che specifica l'exit status, il quale è disponibile in un altro thread dello stesso processo che chiama pthread_join(); oppure termina quando ritorna da start_routine() o se viene cancellato con pthread_cancel(). Pthread_join(thread, retval) viene utilizzato per aspettare la terminazione del thread in input, se retval non è NULL in esso viene salvato l'exit status del processo.
+```C
+// Es produttore e consumatore con evnetfd e pthred_create
+#include <pthread.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/eventfd.h>
+#include <unistd.h>
+#include <time.h>
 
-* signalfd(int fd, const sigset_t *mask, int flags): crea un file descripotr che può essere usato per accettare segnali che riguardano il chiamante. E' un'alternativa a sigwaitinfo e ha il vantaggio che il file descripotr può essere monitorato utilizzando poll(), select(), e epoll(). L'argomento mask indica i tipi di segnali che devono essere considerati. Se fd è -1 allora viene creato un nuovo file descriptor , se non è -1 deve indicare un file descriptor. Di seguito la struttura standard per utilizzare signalfd
+// Puntatore alla variabile condivisa
+int *val;
+
+// I due file descriptor utilizzati per i semafori
+int eventfdProd;
+int eventfdCons;
+
+// Buffer per read e write
+uint64_t buf;
+
+void* consumerFunction(void* arg) {
+  int readedValue;
+  int readedNumbers=10;
+  while (readedNumbers > 0) {
+    // Se il consumatore può leggere
+    if (read(eventfdCons, &buf, sizeof(buf)) > 0) {
+      readedValue = *val;
+      readedNumbers--;
+      printf("Readed number: %d\n", readedValue);
+      write(eventfdProd, &buf, sizeof(buf));
+      sleep(rand() % 10 + 1);
+    }
+  }
+  return NULL;
+}
+
+void* producerFunction(void* arg) {
+  int number=0;
+  int generatedNumbers=10;
+
+  while (generatedNumbers > 0) {
+    // Se il produttore può iniziare a produrre
+    if (read(eventfdProd, &buf, sizeof(buf)) > 0) {
+      // Produco il numero casuale
+      srand(time(NULL));
+      do {
+        number = rand() % 100 + 1;
+      }while(number == *val);
+
+      generatedNumbers--;
+      printf("Produced number: %d\n", number);
+      *val = number;
+      // Rilascio della variabile condivisa
+      write(eventfdCons, &buf, sizeof(buf));
+      // Attende 
+      sleep(rand() % 10);
+    }
+  }
+  return NULL;
+}
+
+int main(int argc, char*argv[]) {
+  // Allochiamo uno spazio di memoria per la variabile condivisa
+  val = (int* )malloc(sizeof(int));
+  // Thread per il consumatore e il produttore
+  pthread_t consumer;
+  pthread_t producer;
+
+  // Inizializziamo i semafori per produttore e consumatore
+  // Il consumatore parte con valore 0
+  // in quanto non è ancora stato prodotto nulla
+  eventfdCons = eventfd(0, EFD_SEMAPHORE);
+  
+  // Il produttore parte con valore 1 in  
+  // quanto è il primo a dover partire
+  eventfdProd = eventfd(1, EFD_SEMAPHORE);
+
+  // Creiamo i due thread
+  int succesfullStartProd;
+  int succesfullStartCons;
+
+  succesfullStartProd = pthread_create(&producer, NULL, producerFunction, NULL);
+  if (succesfullStartProd != 0) printf("Error during creation of producer thread\n");
+
+  succesfullStartCons = pthread_create(&consumer, NULL, consumerFunction, NULL);
+  if (succesfullStartCons != 0) printf("Error during creation of consumer thread\n");
+
+  pthread_join(producer, NULL);
+  pthread_join(consumer, NULL);
+
+  printf("Task completed\n");
+  exit(EXIT_SUCCESS);
+
+}
+```
+
+* signalfd(int fd, const sigset_t *mask, int flags): crea un file descripotr che può essere usato per accettare segnali che riguardano il chiamante. E' un'alternativa a sigwaitinfo e ha il vantaggio che il file descripotr può essere monitorato utilizzando poll(), select(), e epoll(). L'argomento mask indica i tipi di segnali che devono essere considerati. Se fd è -1 allora viene creato un nuovo file descriptor , se non è -1 deve indicare un file descriptor. Di seguito la struttura standard per utilizzare signalfd. (struct signalfd_siginfo fdsi è dove vengono salvati)
 ```C
 #include <limits.h>
 #include <sys/signalfd.h>
@@ -173,48 +610,52 @@ pid_t mainProc = getpid();
    sigaddset(&mask, SIGUSR1);
    sigaddset(&mask, SIGUSR2);
 
-// Tramite sigprocmask cambiamo la signal mask
-// standard con quella appena creata
-if (sigprocmask(SIG_BLOCK, &mask, NULL) == -1)
-	handle_error("sigprocmask");
-// Creiamo il file descriptor per accetare i segnali
-// indicati dalla mask
-sfd = signalfd(-1, &mask, 0);
-if (sfd == -1)
-	handle_error("signalfd");
-// Creiamo il ciclo per ricevere i segnali tramite
-// read()
-for (;;) {
-	s = read(sfd, &fdsi, sizeof(fdsi));
-	if (s != sizeof(fdsi))
-		handle_error("read");
-	if (fdsi.ssi_signo == SIGUSR1) {
-		char fileName[10];
-		time_t currentTime = time(NULL);
-		printf("Got SIGUSR1\n");
-		// Creiamo il nome del file
-		sprintf(fileName, "%d", fdsi.ssi_pid);
-		FILE*file = fopen(fileName,"a");
-		char* time_str=ctime(&currentTime);
-		time_str[strlen(time_str)-1] = '\0';
-		fprintf(file, "USR1 %s\n", time_str);
-		fclose(file);
-	} else if (fdsi.ssi_signo == SIGUSR2) {
-		printf("Got SIGUSR2\n");
-		char fileName[10];
-		time_t currenTime = time(NULL);
-		printf("Got SIGUSR2\n");
-		// Creiamo il nome del file
-		sprintf(fileName, "%d", fdsi.ssi_pid);
-		FILE*file = fopen(fileName,"a");
-		char* time_str=ctime(&currenTime);
-		time_str[strlen(time_str)-1] = '\0';
-		fprintf(file, "USR2 %s\n", time_str);
-		fclose(file);
-	 } else {
-	    printf("Read unexpected signal\n");
-    }
-}
+// Controlliamo se siamo nel processo che deve ricevere i segnali
+if (fork() != 0){
+		// Tramite sigprocmask cambiamo la signal mask
+		// standard con quella appena creata
+		if (sigprocmask(SIG_BLOCK, &mask, NULL) == -1)
+			handle_error("sigprocmask");
+	
+		// Creiamo il file descriptor per accetare i segnali
+		// indicati dalla mask
+		sfd = signalfd(-1, &mask, 0);
+		if (sfd == -1)
+			handle_error("signalfd");
+		// Creiamo il ciclo per ricevere i segnali tramite
+		// read()
+		for (;;) {
+			s = read(sfd, &fdsi, sizeof(fdsi));
+			if (s != sizeof(fdsi))
+				handle_error("read");
+
+			if (fdsi.ssi_signo == SIGUSR1) {
+				char fileName[10];
+				time_t currentTime = time(NULL);
+				printf("Got SIGUSR1\n");
+				// Creiamo il nome del file
+				sprintf(fileName, "%d", fdsi.ssi_pid);
+				FILE*file = fopen(fileName,"a");
+				char* time_str=ctime(&currentTime);
+				time_str[strlen(time_str)-1] = '\0';
+				fprintf(file, "USR1 %s\n", time_str);
+				fclose(file);
+			} else if (fdsi.ssi_signo == SIGUSR2) {
+				printf("Got SIGUSR2\n");
+				char fileName[10];
+				time_t currenTime = time(NULL);
+				printf("Got SIGUSR2\n");
+				// Creiamo il nome del file
+				sprintf(fileName, "%d", fdsi.ssi_pid);
+				FILE*file = fopen(fileName,"a");
+				char* time_str=ctime(&currenTime);
+				time_str[strlen(time_str)-1] = '\0';
+				fprintf(file, "USR2 %s\n", time_str);
+				fclose(file);
+			 } else {
+			    printf("Read unexpected signal\n");
+		    }
+		}
 ```
 
 
@@ -260,7 +701,54 @@ while ((option= getopt(argc, argv, "j:"))!= -1) {
 
 * utime(filePath, struct utimebuf): permette di cambiare il tempo di ultimo accesso e di ultima modifica di un file. Per accedere ai tempi correnti del filre si può utilizzare stat e prendere il campo st_mtime e st_atime. Es:
 ```C
-while ((entry=readdir(dir)) != NULL) {
+
+/*Esercizio 1: Linguaggio C (obbligatorio) 20 punti
+ *	Scrivere un programma ager in grado di invecchiare file.
+ *	Il programma deve poter prendere una lista di file come parametri o nessun parametro, nel qual caso invecchierà
+ *	tutti I file della directory corrente. “invecchiare” significa predatare il tempo di ultimo accesso e di modifica di 10
+ *	giorni.
+ *	Esempio:
+ *	$ ls -l file
+ *	-rw-r--r-- 1 renzo renzo 0 Feb 17 09:07 file
+ *	$ ./ager file
+ *	$ ls -l file
+ *	-rw-r--r-- 1 renzo renzo 0 Feb 7 09:07 file
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <utime.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include <unistd.h>
+#include <limits.h>
+#include <fcntl.h>
+#include <dirent.h>
+#include <time.h>
+
+int main(int argc, char*argv[]) {
+	
+	// Se non ha paramteri in input
+	// eseguiamo sulla directory corrente
+	if (argc == 1) {
+		char currentDir[PATH_MAX];
+		DIR* dir;
+		getcwd(currentDir, sizeof(currentDir));
+		dir = opendir(currentDir);
+		struct dirent *entry;
+		if (dir == NULL){
+			printf("Unable to read directory\n");
+			exit(EXIT_FAILURE);
+}
+		while ((entry=readdir(dir)) != NULL) {
 			if (entry->d_type & DT_REG) {
 				char filePath[PATH_MAX];
 				struct utimbuf newTime;
@@ -278,6 +766,26 @@ while ((entry=readdir(dir)) != NULL) {
 				utime(filePath, &newTime);
 			}
 		}
+	} else if (argc > 1) {
+		for (int i=1; i < argc; i++) {
+			struct stat fileStat;
+			if (stat(argv[i], &fileStat)==0) {
+				struct utimbuf newTime;
+			// 10 giorni in secondi = 864000
+        fileStat.st_atime= fileStat.st_atime - 864000;
+        fileStat.st_mtime= fileStat.st_mtime - 864000;
+				newTime.actime = fileStat.st_atime;
+				newTime.modtime = fileStat.st_mtime;
+				utime(argv[i], &newTime);
+
+			} else {
+				printf("Error: stat\n");
+				exit(EXIT_FAILURE);
+			}
+		}
+	} 
+	return 0;
+}
 ```
 
 * dlopen: serve per lanciare librerie/programmi da un'altro programma, si usa insieme a dlsym che permette di ottenre l'indirizzo della funzione da lanciare. Nel caso di un eseguibile per eseguirlo bisogna utilizzare execvp e fork con ./
@@ -389,7 +897,10 @@ int fd1 = fileno(destFile);
               execvp(command, argumentList);
           }
 ```
+
+poll(): 
 ### Libraries and API
+
 
 * inotify: fornisce metodi per monitorare directory e eventi nel filesystem in generale. Quando una directory viene monitorata inotify ritornerà gli eventi riguardanti quella directory.
 Di seguito una procedura standard per l'inizializzazione di inotify su una directory(se si vogliono leggere più eventi inserire il while in un altro while (numberOfEvents = read(fd, buffer, EVENT_BUF_LEN)):
@@ -457,45 +968,92 @@ int main(int argc, char*argv[]) {
 
 * timerfd: permette di creare timer identificati da un file descriptor attraversp timerfd_create. Poi si utilizza timerfd_settime() per settare i valori del timer. In particolare timerfd_settime() prende in input 4 valori, il primo il file descriptor del timer, il secondo una flag(si può settare a 0), il terzo una struttura che setta i valori del timer(it_value.tv_sec è la parte intera del valore da aspettare in secondi, it_value.tv_nsec è la parte decimale in nanosecondi). Il seguente esempio mostra come settare un timer che prende in input valori in milli secondi e setta il timer per aspettare il tempo in input:
 ```C
-// Creiamo il timer e salviamo il suo file descriptor
-int timerFd=timerfd_create(CLOCK_REALTIME, 0);
 
-if (timerFd > 0) {
-	// Prendiamo il valore in input e lo convertiamo in intero
-	int timeInMs= (int)atoi(argv[1]);
-	float parteInteraSec= timeInMs/1000;
-	float parteDecimaleSec=(timeInMs % 1000)/1000;
-	float nanosec=parteDecimaleSec * 1000000000;
-	printf("Tempo in sec: %f\n Tempo in nanosec: %f\n", parteInteraSec, nanosec);
-	struct itimerspec spec;
-	// spec.it_value specifica la scadenza iniziale del timer 
-	// in secondi e in nanosecondi. Settare entrambi i valori con un valore 
-	// != 0 fa partire il timer.
-	spec.it_value.tv_sec = parteInteraSec;
-	spec.it_value.tv_nsec = nanosec;
-	//spec.it_interval se settato a 0, il timer espirerà solo
-	// una volta, mentre seù settato a un valore != 0 specifica il periodo
-	// per timer ripetuti.
-	spec.it_interval.tv_sec = 0;
-	spec.it_interval.tv_nsec = 0;
-	timerfd_settime(timerFd, 0, &spec, NULL);
-	printf("Timer started\n");
-	uint64_t buf;
-	ssize_t size;
-	size= read(timerFd, &buf, sizeof(uint64_t));
-		if (size != sizeof(uint64_t))
-			printf("Error: read\n");
+/*	Lo scopo di questo esercizioè di scrivere msleep. msleep si comporta come sleep(1) ma invece di attendere il
+ *	numero di secondi indicati come parametro deve aspettare il numero di millisecondi indicati come parametro.d
+ *	es:
+ *	msleep 2340
+ *	completa la sua esecuzione in 2340 millisecondi alias 2.34 secondi.
+ *	La msleep deve essere implementata usando i timerfd (v. timerfd_create(2))
+ *
+ *
+ */
+#include <sys/timerfd.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <time.h>
+#include <stdint.h>
+#include <inttypes.h>
+
+
+int main(int argc, char*argv[]) {
+	// Creiamo il timer e salviamo il suo file descriptor
+	int timerFd=timerfd_create(CLOCK_REALTIME, 0);
 	
-	
-	printf("Timer expired after %d ms\n", timeInMs);
-	
-} 
-return 0;
+	if (timerFd > 0) {
+		// Prendiamo il valore in input e lo convertiamo in intero
+		int timeInMs= (int)atoi(argv[1]);
+		float parteInteraSec= timeInMs/1000;
+		float parteDecimaleSec=(timeInMs % 1000)/1000;
+		float nanosec=parteDecimaleSec * 1000000000;
+		printf("Tempo in sec: %f\n Tempo in nanosec: %f\n", parteInteraSec, nanosec);
+		struct itimerspec spec;
+		// spec.it_value specifica la scadenza iniziale del timer 
+		// in secondi e in nanosecondi. Settare entrambi i valori con un valore 
+		// != 0 fa partire il timer.
+		spec.it_value.tv_sec = parteInteraSec;
+		spec.it_value.tv_nsec = nanosec;
+		//spec.it_interval se settato a 0, il timer espirerà solo
+		// una volta, mentre seù settato a un valore != 0 specifica il periodo
+		// per timer ripetuti.
+		spec.it_interval.tv_sec = 0;
+		spec.it_interval.tv_nsec = 0;
+
+		timerfd_settime(timerFd, 0, &spec, NULL);
+		printf("Timer started\n");
+
+
+		uint64_t buf;
+		ssize_t size;
+		size= read(timerFd, &buf, sizeof(uint64_t));
+			if (size != sizeof(uint64_t))
+				printf("Error: read\n");
+		
+		
+		printf("Timer expired after %d ms\n", timeInMs);
+		
+	} 
+	return 0;
+}
 ```
-
 * poll(): poll permette di avere un insieme di file descriptor e di aspettare gli eventi per ognuno di essi. Può aspettare per un singolo evento oppure per più eventi. Ritorna il numero di eventi che si sono verificati. Di seguito un esempio di utilizzo con timerfd in cui si hanno più timer e si controlla con poll quando scadono.
 ```C
-struct pollfd timerPollFd[argc - 1];
+/*
+ * Esercizio 2: Linguaggio C: 10 punti
+ *	Estendere la soluione dell'esercizio 1: mmsleep (multimsleep) ammette molteplici parametri.
+ *	msleep 1234 3456 2345
+ *	allo scadere di 1234 millisecondi stampa 1234, allo scadere di 2345 millisecondi stampa 2345 e infine a 3456
+ *	millisecondi dalla attivazione stampa 3456 ed esce.
+ *	Questo programma deve essere implementato creando un timerfd per ogni parametro e usando poll(2) per
+ *	aspettare il prossimo evento.
+ * 
+ *
+ */
+
+#include <sys/timerfd.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdio.h>
+#include <sys/types.h>
+#include <time.h>
+#include <stdint.h>
+#include <inttypes.h>
+#include <poll.h>
+
+int main(int argc, char*argv[]) {
+	struct pollfd timerPollFd[argc - 1];
 	struct itimerspec specs[argc - 1];
 	int timesInMs[argc - 1];
 	// Creiamo il timer e salviamo il suo file descriptor per
@@ -543,8 +1101,46 @@ struct pollfd timerPollFd[argc - 1];
 	for(int i=0; i<argc; i++) {
 		close(timerPollFd[i].fd);
 	}
+	return 0;
+
+}
 ```
 ### Snippets:
+
+* Snippet per leggere file con fgets:
+```C
+char lineToRead[150];
+while(fgets(lineToRead, 150, file)!= NULL )
+``` 
+
+* Snippet in C per controllare se da la struct stat un file è un eseguibile:
+```C
+ struct stat file;
+        stat(filePath, &file);
+
+        if ((S_IXUSR & file.st_mode)) {
+```
+
+* Snippet in C per controllare se una directory è vuota:
+```C
+// Controlliamo se la directory esiste
+  DIR* checkDir = opendir(dir);
+  if (checkDir == NULL) {
+    printf("Error: directory \"%s\" does not exist\n", dir);
+    exit(EXIT_FAILURE);
+  }
+
+  //  ed è vuota
+  struct dirent *d;
+  int n=0;
+  while ((d = readdir(checkDir)) != NULL) {
+    if (n > 2){
+      printf("Error: directory isn't empty\n");
+      exit(EXIT_FAILURE);
+    }
+  }
+```
+
 * Snippet di codice per estrarre/spezzare una stringa in base a un carattere inserito attraverso strtok:
 ```C
 token = strtok(lineToRead, " ");
@@ -881,8 +1477,9 @@ text.split("\n")
 ```
 * Un file aperto può anche essere letto tramite file.read(byte da leggere) che restituisce come stringa i byte letti. Se non si mette nulla in input il valore è -1 ovvero legge l'intero file.
 
-* Per eseguire comandi da terminale si può usare subprocess.run(command, shell=False), che restituisce un oggetto CompletedProcess al completamento. Su questo oggetto è possibile controllare il valore ritornato dal comando eseguito tramite returnValue.check_returncode().
+* Per eseguire comandi del terminale si può usare subprocess.run(command, shell=False), che restituisce un oggetto CompletedProcess al completamento. Su questo oggetto è possibile controllare il valore ritornato dal comando eseguito tramite returnValue.check_returncode().
 ```Python
+import subprocess
 returnValue = subprocess.run(commands, shell=False)
 returnValue.check_returncode()
 ```
@@ -911,6 +1508,7 @@ import shutil
 ```
 #### Bash
 
+
 * Es0: Rendete la vostra directory home inaccessibile ad altri utenti (sia in lettura che in esecuzione). Si puo’
 tenere una sola directory in /public che abbia come nome il vostro username e.g.
 “/public/giovanni.rossi” e che abbia permessi 700
@@ -922,6 +1520,10 @@ mkdir your.name
 chmod 700 /public/your.name
 ```
 
+* Per vedere i pid dei processi attivi utilizzare:
+```Bash
+ps -e > process.txt
+```
 * Per correggere l'indentazione di un file .c si può utilizzare il comando:
 ```Bash
 ex -n '+norm!gg=G' +wq
@@ -1037,6 +1639,16 @@ cProgram+='
 '
 printf "$cProgram" > file.c
 ``` 
+
+* Per prendere il contenuto di un file si può utilizzare cat
+```Bash
+# Salviamo un file con gli Uid per ogni processo
+while read line; do
+  cat /proc/${line}/status > status${line}.txt
+  awk '$1 ~ "Uid:"' status${line}.txt > uid${line}.txt
+  rm status${line}.txt
+done < pid.txt
+```
 ### NOTE:
 
 * I file collegati da un hard link hanno lo stesso inode, compreso il file originale 
@@ -1112,4 +1724,12 @@ size_t sizeFile1= ftell(f1);
 
 ```
 * La funzione basename(path) può essere utilizzata per estrarre il nome del file da un path.
+
+* La funzione ftell si può usare per sapere la dimensione in byte dei file se si mette il cursore del file alla fine.
+```C
+fseek(f1, 0L, SEEK_END);
+size_t sizeFile1= ftell(f1);
+
+```
+
 ## Web Tecnologies
