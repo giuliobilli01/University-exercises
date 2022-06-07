@@ -898,7 +898,6 @@ int fd1 = fileno(destFile);
           }
 ```
 
-poll(): 
 ### Libraries and API
 
 
@@ -1507,6 +1506,11 @@ import shutil
 		os.remove(f)
 ```
 #### Bash
+
+* Es4(inviare la mail da terminale):
+```Bash
+mail -s "PROVAPRATICA" -A es1_cognome.c -A es2_cognome.c -A es3_cognome.bash renzo@cs.unibo.it
+```
 
 
 * Es0: Rendete la vostra directory home inaccessibile ad altri utenti (sia in lettura che in esecuzione). Si puo’
