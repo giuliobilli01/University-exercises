@@ -1,0 +1,92 @@
+swagger: "2.0"
+info:
+  description: "API Restaurant"
+  version: "1.0.6"
+  title: "Swagger Restaurant"
+  
+host: "tw.cs.unibo.it"
+basePath: "/v1"
+
+# Da qui inizia la sezione paths con i vari route
+
+paths:
+  /menu/:
+    get:
+      summary: Get the list of menues
+      operationId: getListOfMenues
+      responses:
+        200:
+          description: "OK"
+          schema:
+            type: array
+            items:
+              $ref: "#/definitions/Menu"
+        400:
+          description: "Error"
+  
+  /menu/{idMenu}:
+    get:
+      summary: Get information of a menu
+      operationId: getMenu
+      parameters:
+        - name: idMenu
+          in: path
+          description: id of the menu
+          required: true
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: "OK"
+          schema:
+            $ref: "#/definitions/Menu"
+        400:
+          description: error
+  
+  /menu/{idMenu}/piatti/:    
+    post:
+      summary: add a plate to a menu
+      parameters:
+        - name: idMenu
+          in: path
+          description: menu id
+          required: true
+          type: integer
+          format: int64
+        
+        - name: piatto 
+          in: body
+          schema:
+            $ref: "#/definitions/Piatto"
+      responses:
+        200:
+          description: "OK"
+        400:
+          description: "Error"
+      
+schemes:
+- "http"
+              
+definitions:
+  Menu:
+    type: object
+    required:
+      - id
+      - desc
+    properties:
+      id:
+        type: integer
+        format: int64
+      desc:
+        type: string
+  Piatto:
+    type: object
+    required:
+      - id
+    properties:
+      id:
+        type: integer
+        format: int64
+    
+        
+  
