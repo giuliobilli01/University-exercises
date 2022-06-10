@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='UTF-8'>
+  </head>
+  <body>
+    <div id="es4" class="esercizio">
+      <h1>Esercizio 4</h1>
+      <h2>Pokedex:</h2>
+      <p>Rispondi alle seguenti domande e clicca su
+         <b>Invia</b> per spedire i risultati
+      </p>
+      <form name="pokedex" method="post" action="http://www.cs.unibo.it/test.php">
+        <ol>
+          <li> Quali tra questi Pokemon hai catturato?<br>
+            <table border="1" cellpadding="10">
+              <tr>
+                <td>
+                  <label><input type="checkbox" name="Lilo" value="Lilo">Lilo e stitch</label>
+                </td>
+                <td>
+                  <img height="150" width="150" src="http://www.immaginipertutti.com/pic/lilo-e-stitch/immagine-lilo-e-stitch-3.jpg" alt="Lilo e stitch perchè il prof si inventa i siti">
+                </td>
+              </tr>
+
+              <tr>
+                <td>
+                  <label><input type="checkbox" name="EldenRing" value="EldenRing">Platino Elden Ring</label>
+                </td>
+                <td>
+                  <img height="150" width="150" src="https://i.redd.it/x1y7r33pp2l81.jpg" alt="Prova dita ma buco">
+                </td>
+              </tr>
+
+            </table>
+          </li>
+          <li>Qual è il tup Pokemon preferito?<br>
+            <select name="fav_pokemon" size="1">
+              <option selected>Platino Elden Ring</option>
+              <option>Lilo e Stitch</option>
+            </select>
+          </li>
+        </ol>  
+        <input type="submit" name="Submit" value="Invia">
+        <input type="reset" name="Submit2" value="Annulla">
+      </form>
+    </div>
+  </body>
+</html>
+
