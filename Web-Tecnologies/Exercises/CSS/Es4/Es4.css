@@ -1,0 +1,61 @@
+div.container {
+  display: grid;
+  grid-template-rows: 70px 300px 150px;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-areas: "nav nav nav nav nav nav"
+                       "title title title title title title"
+                       ". content content content content .";
+}
+
+
+nav {
+  display: grid;
+  grid-template-rows: 70px;
+  grid-template-columns: 100px 100px 1fr;
+  grid-template-areas: "tool1 tool2 .";
+  grid-area: nav;
+  background-color: lightgray;
+}
+
+
+p.tool1 {
+  background-color: lightgray;
+  text-align: center;
+  font-size: 125%;
+  grid-area: tool1;
+  justify-self: start;
+}
+
+p.tool2 {
+  background-color: darkgray;
+  text-align: center;
+  font-size: 125%;
+  grid-area: tool2;
+  justify-self: start;
+}
+
+
+h1 {
+  background-color: darkgray;
+  text-align: left;
+  grid-area: title;
+  padding-top: 5%;
+  font-size: 300%;
+}
+
+
+div.sections{
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-template-areas: "cont cont cont cont";
+  grid-area: content;
+
+}
+
+p {
+  margin-right: 5rem;
+  grid-area: cont;
+}
+
+
+

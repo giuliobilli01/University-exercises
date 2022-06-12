@@ -1,0 +1,25 @@
+body{
+  font-family: Verdana;
+}
+
+h1, h2, h3{
+  background-color: #D3D3D3;
+  font-style: italic;
+  text-align: right;
+}
+
+span.fragment {
+  background-color: #FFFF00;
+}
+
+span.commodo {
+  background-color: #FF0000;
+  font-weight: bold;
+  letter-spacing: 20px;
+  font-size: 125%;
+}
+
+span.quote {
+  background-color: #FFFF00;
+}
+

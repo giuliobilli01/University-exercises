@@ -1,0 +1,23 @@
+body {
+  font-family: Courier New;
+  padding: 10px;
+}
+
+section#sec1 {
+  background-color: lightgrey;
+  text-align: justify;
+}
+
+h1 {
+  text-align: center;
+}
+
+a {
+  background-color: red;
+  font-size: 150%;
+}
+
+ol#list1 {
+  font-style: italic;
+  border: 3px dashed blue;
+}
