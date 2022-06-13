@@ -1,0 +1,42 @@
+nav {
+  display: flex;
+  flex-direction: row;
+  justify-content:flex-start;
+  flex-wrap: wrap;
+  column-gap: 10px;
+  align-items: stretch;
+  background-color: whitesmoke;
+}
+
+
+p.tool1 {  
+background-color: whitesmoke;
+}
+
+p.tool2 {
+  background-color: darkgray;
+}
+
+
+h1 {
+  background-color: gray;
+  font-size: 300%;
+  padding: 4rem 2rem;
+}
+
+div.sections {
+  display: grid;
+  grid-template-rows: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr;
+  grid-gap: 50px;
+  margin: 0 12rem;
+}
+
+@media all and (max-width: 999px) {
+  div.sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 50px;
+
+  }
+}
