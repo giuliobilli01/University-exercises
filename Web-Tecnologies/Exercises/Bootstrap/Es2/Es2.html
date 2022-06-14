@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width" initial-scale="1">
+    <title>Es1 bootstrap</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <script type="text/javascript" src="./script.js"></script>
+  </head>
+  <body>
+    <nav class="nav nav-tab flex-column flex-sm-column flex-md-row" style="background-color: black">
+      <a class="nav-link active" aria-current="page" href="https://it.wikipedia.org/wiki/Santorini" style="color: white">My Greece</a>
+      <a class="nav-link disabled" style="color: white">About</a>
+      <a class="nav-link disabled" style="color: white">Book a Vacation</a>
+      <a class="nav-link disabled" style="color: white">Contacts</a>
+    </nav>
+
+
+   <div class="link nav flex-column mb-5 mx-3 " >
+      <a class="nav-link active border-bottom border-dark" aria-current="page" id="ourDest" href="#" onclick="showOnClick1()" style="background-color: lightgray;" >Our destination</a>
+      <div class="ourDest container" id="div1" style="display:none">
+        <div class="row justify-content-sm-start mb-3">
+          <div class="col-7">
+            <img src="https://st4.depositphotos.com/2001403/20493/i/950/depositphotos_204936324-stock-photo-santorini-island-greece-oia-town.jpg" class="img-fluid" alt="Immagine si santorini">
+          </div>
+          <div class="col-5 ">
+            <h1> Isola di santorini</h1>
+            <P>Santorini (in greco antico Thera; in italiano si chiama anche Santorino; in greco moderno Santoríni) 
+              è l'isola più meridionale dell'arcipelago delle Cicladi, nel mare Egeo. La sua superficie è di 79,19 km². 
+              Il nome attuale "Santorini", una corruzione del nome Sant'Erini, le fu dato dai veneziani in onore di Santa Irene di Tessalonica,
+              martire del 304, a cui era dedicata la basilica di Perissa, località della parte sud-orientale dell'isola. 
+              Dal punto di vista amministrativo, rappresenta parte del comune omonimo, nella periferia dell'Egeo Meridionale. </P> 
+          </div>
+        </div>
+      </div>
+      <a class="nav-link active border-bottom border-dark" href="#" style="background-color: lightgray;" onclick="showOnClick2()">Best beaches</a>
+      <div class="bestBeaches container mb-3" id="div2" style="display:none">
+        <div id="carouselCaptions" class="carousel slide" data-bs-ride="false">
+          <div class="carousel-indicators">
+            <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Nea Kameni"></button>
+            <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="1" aria-label="Palea Kameni"></button>
+            <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="2" aria-label="Spiaggia di Perissa"></button>
+            <button type="button" data-bs-target="#carouselCaptions" data-bs-slide-to="3" aria-label="Amoudi Bay"></button>
+          </div>
+          <div class="carousel-inner">
+            <div class="carousel-item active">
+              <img src="https://www.costacrociere.it/content/dam/costa/costa-magazine/article-images/santorini-beaches/nea-kameni-santorini.jpg.image.648.487.high.jpg" class="d-block w-100 h-50" alt="Nea Kameni">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Nea Kameni</h5>
+                <p>Nea Kameni è una piccola isola greca che si trova nel Mar Egeo, all’interno della caldera 
+                  di Santorini. Questa terra disabitata, che d’estate si ricopre di piccole piante grasse di colore rosso, 
+                  è meta ogni anno della visita di turisti affascinati dalla sua storia e dalla sua formazione.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://www.costacrociere.it/content/dam/costa/costa-magazine/article-images/santorini-beaches/palea-kameni-santorini.jpg.image.648.487.high.jpg" class="d-block w-100 h-50" alt="Palea Kameni">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Palea Kameni</h5>
+                <p>Palea Kameni è la sorella di Nea Kameni. Anch’essa si è formata in seguito alle eruzioni 
+                  del vulcano di Santorini avvenute tra il 197 a.C. e il 47 d.C. L’attività vulcanica dell’isola cessò intorno alla fine del I secolo d.C.
+                  per poi riprendere nel 726 e poi nel 1500, quando si formò la sorella.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://www.costacrociere.it/content/dam/costa/costa-magazine/article-images/santorini-beaches/santorini-spiaggia-perissa.jpg.image.648.487.high.jpg" class="d-block w-100 h-50" alt="Spiaggia di Perissa">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Spiaggia di Perissa</h5>
+                <p>Perissa è considerata la spiaggia più bella di Santorini. È lunga circa tre chilometri 
+                  ed è nota come la ‘spiaggia nera’ per il colore dei piccoli ciottoli 
+                  e dalla sabbia vulcanica disseminata per tutta la baia.</p>
+              </div>
+            </div>
+            <div class="carousel-item">
+              <img src="https://www.costacrociere.it/content/dam/costa/costa-magazine/article-images/santorini-beaches/santorini-spiaggia-perissa.jpg.image.648.487.high.jpg" class="d-block w-100 h-50" alt="Spiaggia di Perissa">
+              <div class="carousel-caption d-none d-md-block">
+                <h5>Amoudi Bay</h5>
+                <p>Amoudi Bay è uno dei posti più frequentati dell’isola di Santorini, dove è possibile immergersi in quella 
+                  che è la vera anima della Grecia. Oltre a fare in bagno in una delle baie con il mare più cristallino 
+                  dell’isola, è possibile visitare la zona circostante, fatta di costruzioni caratteristiche e ristorantini tipici 
+                  dell’isola dove mangiare in assoluta calma e relax. </p>
+              </div>
+            </div>
+          </div>
+          <button class="carousel-control-prev" type="button" data-bs-target="#carouselCaptions" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Previous</span>
+          </button>
+          <button class="carousel-control-next" type="button" data-bs-target="#carouselCaptions" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Next</span>
+          </button>
+        </div>
+      </div>
+
+      <a class="nav-link active border-bottom border-dark" href="#" style="background-color: lightgray;" onclick="showOnClick3()">Activities</a>
+      <div class="ourDest container" id="div3" style="display:none">
+        <div class="row row-cols-auto justify-content-sm-start mb-3">
+          <div class="col">
+
+            <div class="card" style="width: 18rem;">
+              <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/07/0d/dd/56.jpg" class="card-img-top" alt="crociera sulla caldera">
+              <div class="card-body">
+                <h5 class="card-title">Crociera sulla caldera</h5>
+                <p class="card-text">Scopri la bellezza di Santorini e delle sue spiagge e sorgenti termali in una crociera in catamarano. 
+                  Scegli una crociera diurna o al tramonto e naviga intorno all'isola e sulla caldera (cratere vulcanico inondato) 
+                  su un catamarano di lusso. Fai una sosta per fare il bagno nelle sorgenti di Nea Kameni; 
+                  nuota, fai snorkeling o rilassati in spiaggia; goditi il vino di Santorini e la birra greca illimitati, 
+                  oltre a un pasto greco preparato a bordo.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+
+          </div>
+          <div class="col">
+
+            <div class="card" style="width: 18rem;">
+              <img src="https://a.cdn-hotels.com/gdcs/production61/d230/f095e150-f585-11e8-b8fa-0242ac11000d.jpg" class="card-img-top" alt="tramonto">
+              <div class="card-body">
+                <h5 class="card-title">Il tramonto</h5>
+                <p class="card-text">Dai ruderi del castello veneziano si applaude quando il sole scompare, 
+                  in un attimo di esaltazione collettiva e di condivisione planetaria: il saluto al sole tutti insieme e poi ognuno riprende la sua strada. 
+                  Un’esperienza quasi antropologica.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+    
+          </div>
+          <div class="col">
+             
+            <div class="card" style="width: 18rem;">
+              <img src="https://media.tacdn.com/media/attractions-splice-spp-674x446/09/f8/47/bb.jpg" class="card-img-top" alt="kayak">
+              <div class="card-body">
+                <h5 class="card-title">Kayak</h5>
+                <p class="card-text">Esci in acqua con questa avventura in kayak e snorkeling. 
+                  Dopo un comodo trasferimento in hotel, intraprendi un'avventura costiera dalla pittoresca spiaggia nera. 
+                  Dirigiti verso est per ammirare la baia indiana, la caldera di Santorini e le isole di Aspronisi e Thirasia.</p>
+                <a href="#" class="btn btn-primary">Go somewhere</a>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+   </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+  </body>
+</html>
