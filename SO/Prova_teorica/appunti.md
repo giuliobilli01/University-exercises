@@ -1,0 +1,5 @@
+Un livelock può verificarsi se uno dice finchè non ho ricevuto 3 mando 2 ad un altro che finchè non riceve 3 manda 2.
+
+* Il TLB fa da cache per la tabella delle pagine, esso in base a una associazione chiave, valore (pagina, frame) indica in quale frame della memoria è presente una pagina. Il page  fault può diventare un caso speciale di TLB refill ed esso viene generato quando con memoria virtuale, un processo tenta di accedere ad una pagina che è in memoria secondaria e non centrale. Quindi il TLB avviene quando non si trova la pagina nel TLB (cache) e quindi viene consultata la tabella delle pagine per trovare il frame effettivo e inserirlo nel TLB (la pagina potrebbe essere in memoria ma non nel TLB),mentre un page fault si verifica quando una pagina non è in memoria principale ma è in memoria secondaria.
+
+* I dischi permettono la memorizzazione non volatile, per individuare un dato occorre indirizzarlo in termini di cilindro, testina, settore. Le operazioni sono READ, WRITE, SEEK, la seek consiste nello spostamento del pettine di testine da un cilindro ad un'altro
